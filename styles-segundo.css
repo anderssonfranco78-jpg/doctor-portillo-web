@@ -386,6 +386,13 @@ p {
 }
 
 /* Statistics Strip - Monumental Outcrowd numbers */
+.services-grid-3d {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    margin-top: 4rem;
+}
+
 .stats-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -494,10 +501,10 @@ p {
 /* Hotspot Dots */
 .hotspot-dot {
     position: absolute;
-    width: 20px;
-    height: 20px;
+    width: 12px;
+    height: 12px;
     border-radius: var(--radius-pill);
-    background-color: rgba(254, 74, 35, 0.2);
+    background-color: rgba(254, 74, 35, 0.4);
     border: 2px solid var(--accent-orange);
     cursor: pointer;
     transform: translate(-50%, -50%);
@@ -508,7 +515,7 @@ p {
 .hotspot-dot::before {
     content: '';
     position: absolute;
-    inset: -6px;
+    inset: -4px;
     border-radius: var(--radius-pill);
     border: 1.5px solid var(--accent-orange);
     opacity: 0.6;
@@ -518,6 +525,19 @@ p {
 .hotspot-dot:hover {
     transform: translate(-50%, -50%) scale(1.3);
     background-color: var(--accent-orange);
+}
+
+/* Área táctil extendida para móviles (Touch target de 48x48px mínimo) */
+.hotspot-dot::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 48px;
+    background: transparent;
+    cursor: pointer;
 }
 
 .hotspot-panel-card {
@@ -828,6 +848,14 @@ p {
     font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
+}
+
+/* About Doctor Section */
+.doctor-layout {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 80px;
+    align-items: center;
 }
 
 /* Contact and Symptom Appointment Form */
@@ -1251,7 +1279,7 @@ footer {
         opacity: 0.8;
     }
     50% {
-        transform: scale(1.5);
+        transform: scale(1.3);
         opacity: 0;
     }
     100% {
@@ -1289,7 +1317,8 @@ footer {
     .hero-layout,
     .symptoms-layout,
     .locations-container,
-    .contact-grid {
+    .contact-grid,
+    .doctor-layout {
         grid-template-columns: 1fr;
         gap: 60px;
     }
@@ -1302,6 +1331,14 @@ footer {
         max-width: 480px;
         margin: 0 auto;
         width: 100%;
+        height: auto;
+        padding: 30px;
+    }
+    .hotspot-label {
+        display: none !important;
+    }
+    #inicio {
+        background-attachment: scroll !important;
     }
 }
 
@@ -1311,8 +1348,36 @@ footer {
         width: calc(100% - 32px);
         top: 16px;
     }
+    #mobile-menu-btn {
+        display: block !important;
+    }
     .nav-links {
-        display: none; /* Ocultar menú en móvil para simplificar, se enfoca en conversión directo a CTA */
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 250px;
+        height: 100vh;
+        background: rgba(8, 8, 8, 0.98);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: right 0.4s ease;
+        padding: 2rem;
+        z-index: 999;
+        border-left: 1px solid rgba(255,255,255,0.1);
+        display: flex;
+    }
+    .nav-links.active {
+        right: 0;
+    }
+    .nav-actions {
+        gap: 0.5rem !important;
+    }
+    #nav-cta-wa {
+        padding: 10px 16px;
+        font-size: 0.85rem;
     }
     .hero-actions {
         flex-direction: column;
@@ -1325,12 +1390,28 @@ footer {
         flex-direction: column;
         gap: 16px;
     }
+    .doctor-layout {
+        display: flex;
+        flex-direction: column;
+    }
+    .doctor-image-wrapper {
+        order: -1;
+        max-width: 320px;
+        margin: 0 auto;
+        width: 100%;
+    }
+    .hero-canvas-wrapper {
+        display: none !important;
+    }
+    .contact-grid,
     .stats-container,
     .services-grid-3d,
     .services-grid-premium,
     .testimonials-perspective-grid,
-    .form-row-grid {
-        grid-template-columns: 1fr;
+    .form-row-grid,
+    .footer-grid-container {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
     }
     .stats-container .stat-item:last-child {
         grid-column: span 1;
@@ -1348,7 +1429,6 @@ footer {
         padding: 40px 24px;
     }
     .footer-grid-container {
-        grid-template-columns: 1fr;
         gap: 40px;
     }
     .footer-meta-copyright {
@@ -1356,4 +1436,116 @@ footer {
         gap: 20px;
         text-align: center;
     }
+}
+
+/* === LORA FONT FOR ALL HEADINGS === */
+h1, h2, h3, h4, .hero-headline {
+    font-family: 'Lora', Georgia, serif;
+}
+
+/* === MARQUEE BAND === */
+.marquee-band {
+    width: 100%;
+    background: #7c3aed;
+    overflow: hidden;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+.marquee-row {
+    display: flex;
+    white-space: nowrap;
+    padding: 10px 0;
+}
+.marquee-row span {
+    display: inline-block;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding-right: 2rem;
+}
+.marquee-left {
+    animation: marquee-scroll-left 30s linear infinite;
+}
+.marquee-right {
+    animation: marquee-scroll-right 30s linear infinite;
+}
+@keyframes marquee-scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+@keyframes marquee-scroll-right {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+}
+
+/* === FLOATING WHATSAPP BUTTON === */
+.floating-wa-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    background-color: #25D366;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
+    z-index: 1000;
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
+}
+.floating-wa-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+}
+.floating-wa-btn svg {
+    width: 35px;
+    height: 35px;
+}
+@media (max-width: 766px) {
+    .floating-wa-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+    }
+    .floating-wa-btn svg {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* === SWIPER TESTIMONIALS === */
+.testimonials-swiper {
+    width: 100%;
+    padding-bottom: 3rem !important;
+}
+.testimonials-swiper .swiper-slide {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+.testimonials-swiper .testimonial-3d-card {
+    width: 100%;
+    max-width: 560px;
+}
+.testimonials-pagination .swiper-pagination-bullet {
+    background: #7c3aed;
+    opacity: 0.5;
+    width: 10px;
+    height: 10px;
+}
+.testimonials-pagination .swiper-pagination-bullet-active {
+    background: #7c3aed;
+    opacity: 1;
+}
+
+/* === GOOGLE MAPS IFRAME === */
+.map-iframe iframe {
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
 }

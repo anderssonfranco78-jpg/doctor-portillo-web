@@ -11,14 +11,18 @@
     <meta name="author" content="Quiroprácticos Portillo">
     
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="styles-segundo.css">
 </head>
 <body>
 
     <!-- Floating Navigation Bar -->
     <nav class="nav-bar">
         <a href="#inicio" class="nav-logo">Dr. Portillo</a>
-        <ul class="nav-links">
+        <ul class="nav-links" id="nav-links-menu">
             <li><a href="#inicio" class="nav-link active">Inicio</a></li>
             <li><a href="#servicios" class="nav-link">Servicios</a></li>
             <li><a href="#dolor-map" class="nav-link">Mapa del Dolor</a></li>
@@ -26,13 +30,18 @@
             <li><a href="#sedes" class="nav-link">Sedes</a></li>
             <li><a href="#testimonios" class="nav-link">Testimonios</a></li>
         </ul>
-        <a href="https://wa.me/50322161866?text=Hola%20Doctor%20Portillo,%20vi%20su%20sitio%20web%20y%20me%20gustaría%20agendar%20una%20consulta%20de%20valoración." target="_blank" class="btn-elastic btn-violet" id="nav-cta-wa">
-            <span>Agendar Consulta</span>
-        </a>
+        <div class="nav-actions" style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://wa.me/50322161866?text=Hola%20Doctor%20Portillo,%20vi%20su%20sitio%20web%20y%20me%20gustaría%20agendar%20una%20consulta%20de%20valoración." target="_blank" class="btn-elastic btn-violet" id="nav-cta-wa">
+                <span>Agendar Consulta</span>
+            </a>
+            <button id="mobile-menu-btn" aria-label="Menú" style="background: none; border: none; color: white; cursor: pointer; display: none;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+        </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="section-dark" id="inicio">
+    <section class="section-dark" id="inicio" style="background-image: linear-gradient(rgba(10,10,15,0.75), rgba(10,10,15,0.90)), url('hero-bg.jpg');">
         <div class="container hero-layout">
             <div class="hero-text-block">
                 <div class="badge-tag violet" animate>
@@ -78,6 +87,16 @@
     </section>
 
     <!-- Services Section -->
+    <div class="marquee-band">
+        <div class="marquee-row marquee-left">
+            <span>Quiropraxia Científica · Sin Cirugía · Alivio del Dolor · Columna Vertebral · Homeocinetría · Dos Sedes · San Salvador · Apopa · </span>
+            <span>Quiropraxia Científica · Sin Cirugía · Alivio del Dolor · Columna Vertebral · Homeocinetría · Dos Sedes · San Salvador · Apopa · </span>
+        </div>
+        <div class="marquee-row marquee-right">
+            <span>Quiropraxia Científica · Sin Cirugía · Alivio del Dolor · Columna Vertebral · Homeocinetría · Dos Sedes · San Salvador · Apopa · </span>
+            <span>Quiropraxia Científica · Sin Cirugía · Alivio del Dolor · Columna Vertebral · Homeocinetría · Dos Sedes · San Salvador · Apopa · </span>
+        </div>
+    </div>
     <section class="section-dark services-section" id="servicios">
         <div class="container">
             <div class="section-intro text-center" style="max-width: 800px; margin: 0 auto 5rem auto; text-align: center;">
@@ -289,22 +308,29 @@
                     <div class="spine-model-wrapper">
                         <img src="mapa-dolor.png" alt="Mapa de dolor de columna vertebral" class="spine-image" loading="lazy">
                         
-                        <!-- Hotspots -->
-                        <!-- Cervical -->
-                        <div id="dot-cervical" class="hotspot-dot" style="top: calc(22% - 21px); left: calc(50.5% - 3px);" onclick="openSymptomModal('Cervical')">
-                            <span class="hotspot-label">Cervicalgia y Rigidez</span>
+                        <!-- Hotspots exactos medidos con Claude -->
+                        <div id="dot-cervical" class="hotspot-dot"
+                             style="top:16.9%; left:50%; transform:translate(-50%,-50%);"
+                             onclick="openSymptomModal('Cervical')">
+                          <span class="hotspot-label">Cervicalgia y Rigidez</span>
                         </div>
-                        <!-- Dorsal / Espalda Alta -->
-                        <div id="dot-thoracic" class="hotspot-dot" style="top: calc(40% - 14px); left: calc(50.5% - 3px);" onclick="openSymptomModal('Dorsal')">
-                            <span class="hotspot-label">Tensión Dorsal</span>
+
+                        <div id="dot-thoracic" class="hotspot-dot"
+                             style="top:37.1%; left:50%; transform:translate(-50%,-50%);"
+                             onclick="openSymptomModal('Dorsal')">
+                          <span class="hotspot-label">Tensión Dorsal</span>
                         </div>
-                        <!-- Lumbar -->
-                        <div id="dot-lumbar" class="hotspot-dot" style="top: calc(66% - 14px); left: calc(50.5% - 3px);" onclick="openSymptomModal('Lumbar')">
-                            <span class="hotspot-label">Lumbalgia Crónica</span>
+
+                        <div id="dot-lumbar" class="hotspot-dot"
+                             style="top:63.2%; left:49.8%; transform:translate(-50%,-50%);"
+                             onclick="openSymptomModal('Lumbar')">
+                          <span class="hotspot-label">Lumbalgia Crónica</span>
                         </div>
-                        <!-- Sacro / Ciática -->
-                        <div id="dot-sacral" class="hotspot-dot" style="top: calc(82% - 2px); left: calc(50.5% - 3px);" onclick="openSymptomModal('Sacro')">
-                            <span class="hotspot-label">Compresión Ciática</span>
+
+                        <div id="dot-sacral" class="hotspot-dot"
+                             style="top:81.8%; left:50%; transform:translate(-50%,-50%);"
+                             onclick="openSymptomModal('Sacro')">
+                          <span class="hotspot-label">Compresión Ciática</span>
                         </div>
                     </div>
                 </div>
@@ -406,6 +432,43 @@
         </div>
     </section>
 
+    <!-- About Doctor Section -->
+    <section class="section-dark" id="doctor">
+        <div class="container doctor-layout">
+            <div class="doctor-image-wrapper" animate>
+                <!-- Aquí referenciamos la imagen que compartiste -->
+                <img src="doctor-profile.jpg" alt="Dr. Luis Alberto Portillo" style="width: 100%; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); object-fit: cover;">
+            </div>
+            <div class="doctor-text-wrapper">
+                <div class="badge-tag violet" animate>Perfil Médico Profesional</div>
+                <h2 animate style="margin-bottom: 1.5rem;">Dr. Luis Alberto Portillo</h2>
+                <p animate style="margin-bottom: 1rem; color: #a1a1aa; line-height: 1.6;">
+                    <strong>Especialista en Biomecánica y Quiropraxia Clínica</strong><br><br>
+                    Con más de 15 años de experiencia clínica, el Dr. Portillo se ha especializado en el tratamiento no invasivo de patologías de la columna vertebral. Graduado de la Universidad de El Salvador, su enfoque combina la precisión de la medicina científica con el alivio rápido de la homeocinetría.
+                </p>
+                <ul style="list-style: none; padding: 0; margin-bottom: 2rem; color: #e4e4e7;" animate>
+                    <li style="margin-bottom: 0.8rem; display: flex; align-items: center; gap: 10px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a277ff" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Especialidad en Alineación Vertebral y Descompresión.
+                    </li>
+                    <li style="margin-bottom: 0.8rem; display: flex; align-items: center; gap: 10px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a277ff" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Certificación Internacional en Diagnóstico Electromagnético.
+                    </li>
+                    <li style="margin-bottom: 0.8rem; display: flex; align-items: center; gap: 10px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a277ff" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Atención clínica personalizada a más de 10,000 pacientes.
+                    </li>
+                </ul>
+                <div animate>
+                    <a href="https://wa.me/50322161866?text=Hola%20Doctor%20Portillo,%20me%20gustaría%20agendar%20una%20cita%20con%20usted." target="_blank" class="btn-elastic btn-violet">
+                        <span>Consultar con el Dr. Portillo</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Locations Section - Optimized High Conversion without Maps -->
     <section class="section-dark" id="sedes">
         <div class="container">
@@ -449,6 +512,10 @@
                                 <span><strong>Lunes a Viernes:</strong> 8:00 AM - 6:00 PM | <strong>Sábado:</strong> 8:00 AM - 12:00 PM</span>
                             </div>
                         </div>
+<div class="map-iframe" style="margin: 1.2rem 0;">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3590.040510557558!2d-89.20988292453768!3d13.711616200000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6331aa1b76abb9%3A0x75560ae9f217523d!2sQuiropr%C3%A1cticos%20portillo!5e0!3m2!1ses!2ssv!4v1749470000000!5m2!1ses!2ssv" width="100%" height="220" style="border:0; border-radius:12px;" allowfullscreen="" loading="lazy" title="Quiroprácticos Portillo San Salvador"></iframe>
+</div>
+<a href="https://www.google.com/maps/place/Quiropr%C3%A1cticos+portillo/@13.7116162,-89.2098829,17z/data=!3m1!4b1!4m6!3m5!1s0x8f6331aa1b76abb9:0x75560ae9f217523d!8m2!3d13.7116162!4d-89.2073026!16s%2Fg%2F11mw8p43b0" target="_blank" class="btn-elastic btn-outline" style="margin-bottom:1rem; display:inline-block;">📍 Cómo llegar</a>
                     </div>
                     <div class="location-actions">
                         <a href="https://wa.me/50322161866?text=Hola%20Doctor%20Portillo,%20vi%20su%20sitio%20web%20y%20me%20gustaría%20agendar%20una%20consulta%20de%20valoración%20para%20la%20sede%20de%20San%20Salvador." target="_blank" class="btn-elastic btn-violet location-wa-btn" data-sede="San Salvador">
@@ -486,6 +553,10 @@
                                 <span><strong>Lunes a Viernes:</strong> 8:00 AM - 6:00 PM | <strong>Sábado:</strong> 8:00 AM - 12:00 PM</span>
                             </div>
                         </div>
+<div class="map-iframe" style="margin: 1.2rem 0;">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3590.040510557558!2d-89.20988292453768!3d13.711616200000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6331aa1b76abb9%3A0x75560ae9f217523d!2sQuiropr%C3%A1cticos%20portillo!5e0!3m2!1ses!2ssv!4v1749470000000!5m2!1ses!2ssv" width="100%" height="220" style="border:0; border-radius:12px;" allowfullscreen="" loading="lazy" title="Quiroprácticos Portillo San Salvador"></iframe>
+</div>
+<a href="https://www.google.com/maps/place/Quiropr%C3%A1cticos+portillo/@13.7116162,-89.2098829,17z/data=!3m1!4b1!4m6!3m5!1s0x8f6331aa1b76abb9:0x75560ae9f217523d!8m2!3d13.7116162!4d-89.2073026!16s%2Fg%2F11mw8p43b0" target="_blank" class="btn-elastic btn-outline" style="margin-bottom:1rem; display:inline-block;">📍 Cómo llegar</a>
                     </div>
                     <div class="location-actions">
                         <a href="https://wa.me/50322161866?text=Hola%20Doctor%20Portillo,%20vi%20su%20sitio%20web%20y%20me%20gustaría%20agendar%20una%20consulta%20de%20valoración%20para%20la%20sede%20de%20Apopa." target="_blank" class="btn-elastic btn-orange location-wa-btn" data-sede="Apopa">
@@ -510,9 +581,10 @@
                 </p>
             </div>
             
-            <div class="testimonials-perspective-grid">
+            <div class="swiper testimonials-swiper">
+            <div class="swiper-wrapper">
                 <!-- Testimonial 1 -->
-                <div class="testimonial-3d-card" animate>
+                <div class="swiper-slide"><div class="testimonial-3d-card" animate>
                     <div class="star-rating">
                         <!-- 5 Stars SVG -->
                         <svg viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
@@ -528,10 +600,10 @@
                         <h5>Mario Flores</h5>
                         <span>Paciente de Ciática (San Salvador)</span>
                     </div>
-                </div>
+                </div></div>
                 
                 <!-- Testimonial 2 -->
-                <div class="testimonial-3d-card rotate-opposite" animate>
+                <div class="swiper-slide"><div class="testimonial-3d-card rotate-opposite" animate>
                     <div class="star-rating">
                         <!-- 5 Stars SVG -->
                         <svg viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
@@ -547,10 +619,10 @@
                         <h5>Sonia de Martínez</h5>
                         <span>Paciente de Homeocinetría (Apopa)</span>
                     </div>
-                </div>
+                </div></div>
                 
                 <!-- Testimonial 3 -->
-                <div class="testimonial-3d-card" animate>
+                <div class="swiper-slide"><div class="testimonial-3d-card" animate>
                     <div class="star-rating">
                         <!-- 5 Stars SVG -->
                         <svg viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
@@ -566,8 +638,10 @@
                         <h5>Carlos Rivas</h5>
                         <span>Paciente de Ajuste Cervical (San Salvador)</span>
                     </div>
-                </div>
+                </div></div>
             </div>
+<div class="swiper-pagination testimonials-pagination"></div>
+</div>
         </div>
     </section>
 
@@ -723,8 +797,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/split-type"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
     <!-- Custom animations master script -->
     <script src="animations.js"></script>
+    <script>
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('nav-links-menu').classList.toggle('active');
+        });
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('nav-links-menu').classList.remove('active');
+            });
+        });
+    </script>
+    
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/50322161866?text=Hola%20Doctor%20Portillo,%20necesito%20agendar%20una%20consulta." target="_blank" class="floating-wa-btn" aria-label="Contactar por WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.487-1.761-1.66-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.012c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+        </svg>
+    </a>
 </body>
 </html>

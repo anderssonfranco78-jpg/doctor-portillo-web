@@ -2,9 +2,6 @@
    Quiroprácticos Portillo - Premium Dark Outcrowd Design System
    ========================================================================== */
 
-/* Google Fonts Import */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
-
 :root {
     /* Color Palette */
     --bg-dark-core: #080808;
@@ -1548,4 +1545,30 @@ h1, h2, h3, h4, .hero-headline {
 .map-iframe iframe {
     border-radius: 12px;
     border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* === SMART MOBILE & TOUCH ERGONOMICS === */
+.is-mobile-device body,
+.is-touch-device body {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.is-touch-device .btn-elastic,
+.is-touch-device .service-card-premium,
+.is-touch-device .symptom-interactive-card,
+.is-touch-device .hotspot-dot,
+.is-touch-device #mobile-menu-btn {
+    touch-action: manipulation;
+}
+
+.is-touch-device .btn-elastic:active,
+.is-touch-device .service-card-premium:active,
+.is-touch-device .symptom-interactive-card:active {
+    transform: scale(0.98);
+}
+
+.is-mobile-device .modal-window-content {
+    max-height: 88vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }

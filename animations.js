@@ -192,202 +192,243 @@ function initSedeConversionButtons() {
     });
 }
 
+// Smart Device Engine (PC vs Phone / Tablet Adaptive Optimization)
+function getDeviceContext() {
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia('(pointer: coarse)').matches;
+    const isNarrowViewport = window.innerWidth <= 768 || window.matchMedia('(max-width: 768px)').matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = isNarrowViewport || (isTouch && window.innerWidth <= 1024);
+    
+    return {
+        isMobile: isMobile,
+        isTouch: isTouch,
+        prefersReducedMotion: prefersReducedMotion,
+        type: isMobile ? 'mobile' : 'desktop'
+    };
+}
+
 // Master Initialization on DOM Loaded
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Initialise form and conversion buttons
     initAppointmentForm();
     initSedeConversionButtons();
     
-    // 2. Dual Animation Engine (Desktop vs Mobile Bypass)
-    const isMobile = window.innerWidth <= 766;
+    // 2. Identify Device (PC vs Mobile Phone)
+    const device = getDeviceContext();
+    document.documentElement.classList.toggle('is-mobile-device', device.isMobile);
+    document.documentElement.classList.toggle('is-desktop-device', !device.isMobile);
+    document.documentElement.classList.toggle('is-touch-device', device.isTouch);
     
-    // Register GSAP plugins
-    gsap.registerPlugin(ScrollTrigger);
+    console.log(`[DEVICE MOTOR] Modo detectado: ${device.type.toUpperCase()} (Touch: ${device.isTouch}, Ancho: ${window.innerWidth}px)`);
     
-    if (isMobile) {
-        console.log("[ANIMATION MOTOR] Mobile mode active. Initialising lightweight IntersectionObserver bypass (60fps target).");
+    // Register GSAP plugins safely
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        try {
+            gsap.registerPlugin(ScrollTrigger);
+        } catch (err) {
+            console.warn("[ANIMATION MOTOR] Error registering ScrollTrigger:", err);
+        }
+    }
+    
+    if (device.isMobile) {
+        console.log("[ANIMATION MOTOR] Teléfono / Móvil activo: Modo Ligero 60fps con IntersectionObserver nativo.");
         
         // Disable ScrollTrigger global tracking to save CPU and battery
-        ScrollTrigger.getAll().forEach(t => t.kill());
-        
-        // Set up CSS reveal animations via lightweight IntersectionObserver
-        const mobileAnimationObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Inject active state using CSS animation instead of complex JS interpolation loops
-                    entry.target.classList.add('gsap-active');
-                    mobileAnimationObserver.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.1, // Trigger animation when 10% of element is in view
-            rootMargin: '0px 0px -40px 0px'
-        });
-        
-        // Query elements with animate attributes and service cards
-        document.querySelectorAll('[animate], .service-card-premium').forEach(el => {
-            // Apply lightweight transition presets directly via CSS variables and GPU transitions
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
-            
-            // Add utility class for easy CSS target override
-            el.classList.add('gsap-target');
-            
-            mobileAnimationObserver.observe(el);
-        });
-        
-        // Create active state style element dynamically for mobile GPU animations
-        const styleSheet = document.createElement("style");
-        styleSheet.innerText = `
-            .gsap-target.gsap-active {
-                opacity: 1 !important;
-                transform: translateY(0) !important;
+        if (typeof ScrollTrigger !== 'undefined') {
+            try {
+                ScrollTrigger.getAll().forEach(t => t.kill());
+            } catch (err) {
+                console.warn("[ANIMATION MOTOR] Error killing ScrollTriggers:", err);
             }
-        `;
-        document.head.appendChild(styleSheet);
-        
-    } else {
-        console.log("[ANIMATION MOTOR] Desktop mode active. Initialising Lenis JS + GSAP ScrollTrigger timeline.");
-        
-        // Initialize Lenis Scroll
-        lenisInstance = new Lenis({
-            lerp: 0.09,
-            wheelMultiplier: 0.7,
-            smoothWheel: true,
-            gestureOrientation: 'vertical'
-        });
-        
-        // Squeeze ScrollTrigger refresh onto Lenis events
-        lenisInstance.on('scroll', () => {
-            ScrollTrigger.update();
-        });
-        
-        // Merge Lenis scroll events directly with GSAP global ticker
-        gsap.ticker.add((time) => {
-            lenisInstance.raf(time * 1000);
-        });
-        
-        // Lag smoothing configuration to avoid timeline jumping
-        gsap.ticker.lagSmoothing(0);
-        
-        // Initialize text revelations using SplitType and GSAP ScrollTrigger
-        const animateElements = document.querySelectorAll('[animate]');
-        
-        animateElements.forEach(el => {
-            // Only apply SplitType to elements containing large text headers or subtext blocks
-            if (el.tagName === 'H1' || el.tagName === 'H2' || el.classList.contains('hero-subtext')) {
-                const text = new SplitType(el, { types: 'lines, words' });
-                
-                // Hide characters initially
-                gsap.set(text.words, {
-                    opacity: 0,
-                    y: 20
-                });
-                
-                gsap.to(text.words, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.5,
-                    ease: "power1.out",
-                    stagger: 0.02,
-                    scrollTrigger: {
-                        trigger: el,
-                        start: "top 85%",
-                        toggleActions: "play none none none"
-                    }
-                });
-            } else {
-                // Block element reveal (Hero actions, stats, cards)
-                gsap.set(el, {
-                    opacity: 0,
-                    y: 40
-                });
-                
-                gsap.to(el, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.7,
-                    ease: "power2.out",
-                    scrollTrigger: {
-                        trigger: el,
-                        start: "top 88%",
-                        toggleActions: "play none none none"
-                    }
-                });
-            }
-        });
-
-        // Staggered entrance for services section cards
-        const servicesGrid = document.querySelector('.services-grid-premium');
-        if (servicesGrid) {
-            const cards = servicesGrid.querySelectorAll('.service-card-premium');
-            gsap.set(cards, {
-                opacity: 0,
-                y: 50,
-                scale: 0.9,
-                rotation: -2
-            });
-            
-            gsap.to(cards, {
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                rotation: 0,
-                duration: 0.8,
-                ease: "back.out(1.2)",
-                stagger: 0.12,
-                scrollTrigger: {
-                    trigger: servicesGrid,
-                    start: "top 85%",
-                    toggleActions: "play none none none"
-                }
-            });
         }
         
-        // Interactive 3D Perspective Rotation for Cards
-        const cards3d = document.querySelectorAll('.service-3d-card, .testimonial-3d-card, .service-card-premium');
-        cards3d.forEach(card => {
-            card.addEventListener('mousemove', function(e) {
-                const rect = this.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const xc = rect.width / 2;
-                const yc = rect.height / 2;
-                
-                // Calculate rotation degree (max 8 deg for subtle premium feel)
-                const rotateX = ((yc - y) / yc) * 8;
-                const rotateY = ((x - xc) / xc) * 8;
-                
-                gsap.to(this, {
-                    rotateX: rotateX,
-                    rotateY: rotateY,
-                    duration: 0.3,
-                    ease: "power1.out"
+        // Set up CSS reveal animations via lightweight IntersectionObserver
+        if (typeof IntersectionObserver !== 'undefined') {
+            const mobileAnimationObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('gsap-active');
+                        mobileAnimationObserver.unobserve(entry.target);
+                    }
                 });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -30px 0px'
             });
             
-            card.addEventListener('mouseleave', function() {
-                // Return to base rotation state
-                const isLeft = this.classList.contains('rotate-left');
-                const isRight = this.classList.contains('rotate-right');
-                const isOpposite = this.classList.contains('rotate-opposite');
-                let baseRotateZ = 0;
-                
-                if (isLeft) baseRotateZ = -1.5;
-                if (isRight) baseRotateZ = 1.5;
-                if (isOpposite) baseRotateZ = -1; // Testimonial rotate offset
-                
-                gsap.to(this, {
-                    rotateX: 0,
-                    rotateY: 0,
-                    rotateZ: baseRotateZ,
-                    duration: 0.5,
-                    ease: "power2.out"
-                });
+            document.querySelectorAll('[animate], .service-card-premium').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(24px)';
+                el.style.transition = 'opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+                el.classList.add('gsap-target');
+                mobileAnimationObserver.observe(el);
             });
-        });
+            
+            const styleSheet = document.createElement("style");
+            styleSheet.innerText = `
+                .gsap-target.gsap-active {
+                    opacity: 1 !important;
+                    transform: translateY(0) !important;
+                }
+            `;
+            document.head.appendChild(styleSheet);
+        }
+        
+    } else {
+        console.log("[ANIMATION MOTOR] PC / Computadora de Escritorio activa: Lenis Smooth Scroll + GSAP Timeline + Efectos 3D.");
+        
+        // Initialize Lenis Scroll safely for Desktop
+        if (typeof Lenis !== 'undefined' && !device.prefersReducedMotion) {
+            try {
+                lenisInstance = new Lenis({
+                    lerp: 0.09,
+                    wheelMultiplier: 0.7,
+                    smoothWheel: true,
+                    gestureOrientation: 'vertical'
+                });
+                
+                if (typeof ScrollTrigger !== 'undefined') {
+                    lenisInstance.on('scroll', () => {
+                        ScrollTrigger.update();
+                    });
+                }
+                
+                if (typeof gsap !== 'undefined') {
+                    gsap.ticker.add((time) => {
+                        lenisInstance.raf(time * 1000);
+                    });
+                    gsap.ticker.lagSmoothing(0);
+                }
+            } catch (err) {
+                console.warn("[ANIMATION MOTOR] Error initializing Lenis:", err);
+            }
+        }
+        
+        // Initialize text revelations using SplitType and GSAP ScrollTrigger
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+            try {
+                const animateElements = document.querySelectorAll('[animate]');
+                
+                animateElements.forEach(el => {
+                    if ((el.tagName === 'H1' || el.tagName === 'H2' || el.classList.contains('hero-subtext')) && typeof SplitType !== 'undefined' && !device.prefersReducedMotion) {
+                        try {
+                            const text = new SplitType(el, { types: 'lines, words' });
+                            
+                            gsap.set(text.words, {
+                                opacity: 0,
+                                y: 20
+                            });
+                            
+                            gsap.to(text.words, {
+                                opacity: 1,
+                                y: 0,
+                                duration: 0.5,
+                                ease: "power1.out",
+                                stagger: 0.02,
+                                scrollTrigger: {
+                                    trigger: el,
+                                    start: "top 85%",
+                                    toggleActions: "play none none none"
+                                }
+                            });
+                        } catch (stErr) {
+                            gsap.set(el, { opacity: 0, y: 30 });
+                            gsap.to(el, { opacity: 1, y: 0, duration: 0.6 });
+                        }
+                    } else {
+                        gsap.set(el, {
+                            opacity: 0,
+                            y: 40
+                        });
+                        
+                        gsap.to(el, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.7,
+                            ease: "power2.out",
+                            scrollTrigger: {
+                                trigger: el,
+                                start: "top 88%",
+                                toggleActions: "play none none none"
+                            }
+                        });
+                    }
+                });
+
+                // Staggered entrance for services section cards
+                const servicesGrid = document.querySelector('.services-grid-premium');
+                if (servicesGrid) {
+                    const cards = servicesGrid.querySelectorAll('.service-card-premium');
+                    gsap.set(cards, {
+                        opacity: 0,
+                        y: 50,
+                        scale: 0.9,
+                        rotation: -2
+                    });
+                    
+                    gsap.to(cards, {
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        rotation: 0,
+                        duration: 0.8,
+                        ease: "back.out(1.2)",
+                        stagger: 0.12,
+                        scrollTrigger: {
+                            trigger: servicesGrid,
+                            start: "top 85%",
+                            toggleActions: "play none none none"
+                        }
+                    });
+                }
+                
+                // Interactive 3D Perspective Rotation for Cards (Desktop mouse only)
+                if (!device.isTouch) {
+                    const cards3d = document.querySelectorAll('.service-3d-card, .testimonial-3d-card, .service-card-premium');
+                    cards3d.forEach(card => {
+                        card.addEventListener('mousemove', function(e) {
+                            const rect = this.getBoundingClientRect();
+                            const x = e.clientX - rect.left;
+                            const y = e.clientY - rect.top;
+                            
+                            const xc = rect.width / 2;
+                            const yc = rect.height / 2;
+                            
+                            const rotateX = ((yc - y) / yc) * 8;
+                            const rotateY = ((x - xc) / xc) * 8;
+                            
+                            gsap.to(this, {
+                                rotateX: rotateX,
+                                rotateY: rotateY,
+                                duration: 0.3,
+                                ease: "power1.out"
+                            });
+                        });
+                        
+                        card.addEventListener('mouseleave', function() {
+                            const isLeft = this.classList.contains('rotate-left');
+                            const isRight = this.classList.contains('rotate-right');
+                            const isOpposite = this.classList.contains('rotate-opposite');
+                            let baseRotateZ = 0;
+                            
+                            if (isLeft) baseRotateZ = -1.5;
+                            if (isRight) baseRotateZ = 1.5;
+                            if (isOpposite) baseRotateZ = -1;
+                            
+                            gsap.to(this, {
+                                rotateX: 0,
+                                rotateY: 0,
+                                rotateZ: baseRotateZ,
+                                duration: 0.5,
+                                ease: "power2.out"
+                            });
+                        });
+                    });
+                }
+            } catch (err) {
+                console.warn("[ANIMATION MOTOR] Error in GSAP animations:", err);
+            }
+        }
     }
 });
 

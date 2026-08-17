@@ -207,19 +207,247 @@ function getDeviceContext() {
     };
 }
 
-// Master Initialization on DOM Loaded
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Initialise form and conversion buttons
-    initAppointmentForm();
-    initSedeConversionButtons();
+let currentDeviceMode = null;
+let mobileAnimationObserver = null;
+let cards3dInitialized = false;
+
+// Setup Mobile Mode
+function setupMobileMode(device) {
+    console.log("[ANIMATION MOTOR] Teléfono / Móvil activo: Modo Ligero 60fps con IntersectionObserver nativo.");
     
-    // 2. Identify Device (PC vs Mobile Phone)
+    // Disable Lenis if running to free CPU/memory
+    if (lenisInstance) {
+        try {
+            lenisInstance.destroy();
+        } catch (e) {}
+        lenisInstance = null;
+    }
+    
+    // Disable ScrollTrigger global tracking to save CPU and battery
+    if (typeof ScrollTrigger !== 'undefined') {
+        try {
+            ScrollTrigger.getAll().forEach(t => t.kill());
+        } catch (err) {
+            console.warn("[ANIMATION MOTOR] Error killing ScrollTriggers:", err);
+        }
+    }
+    
+    // Set up CSS reveal animations via lightweight IntersectionObserver
+    if (typeof IntersectionObserver !== 'undefined' && !mobileAnimationObserver) {
+        mobileAnimationObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('gsap-active');
+                    mobileAnimationObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -30px 0px'
+        });
+        
+        document.querySelectorAll('[animate], .service-card-premium').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(24px)';
+            el.style.transition = 'opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+            el.classList.add('gsap-target');
+            mobileAnimationObserver.observe(el);
+        });
+        
+        if (!document.getElementById('mobile-gpu-styles')) {
+            const styleSheet = document.createElement("style");
+            styleSheet.id = 'mobile-gpu-styles';
+            styleSheet.innerText = `
+                .gsap-target.gsap-active {
+                    opacity: 1 !important;
+                    transform: translateY(0) !important;
+                }
+            `;
+            document.head.appendChild(styleSheet);
+        }
+    }
+}
+
+// Setup Desktop Mode
+function setupDesktopMode(device) {
+    console.log("[ANIMATION MOTOR] PC / Computadora de Escritorio activa: Lenis Smooth Scroll + GSAP Timeline + Efectos 3D.");
+    
+    // Initialize Lenis Scroll safely for Desktop
+    if (typeof Lenis !== 'undefined' && !device.prefersReducedMotion && !lenisInstance) {
+        try {
+            lenisInstance = new Lenis({
+                lerp: 0.09,
+                wheelMultiplier: 0.7,
+                smoothWheel: true,
+                gestureOrientation: 'vertical'
+            });
+            
+            if (typeof ScrollTrigger !== 'undefined') {
+                lenisInstance.on('scroll', () => {
+                    ScrollTrigger.update();
+                });
+            }
+            
+            if (typeof gsap !== 'undefined') {
+                gsap.ticker.add((time) => {
+                    if (lenisInstance) lenisInstance.raf(time * 1000);
+                });
+                gsap.ticker.lagSmoothing(0);
+            }
+        } catch (err) {
+            console.warn("[ANIMATION MOTOR] Error initializing Lenis:", err);
+        }
+    }
+    
+    // Initialize text revelations using SplitType and GSAP ScrollTrigger
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        try {
+            const animateElements = document.querySelectorAll('[animate]');
+            
+            animateElements.forEach(el => {
+                if ((el.tagName === 'H1' || el.tagName === 'H2' || el.classList.contains('hero-subtext')) && typeof SplitType !== 'undefined' && !device.prefersReducedMotion) {
+                    try {
+                        const text = new SplitType(el, { types: 'lines, words' });
+                        
+                        gsap.set(text.words, {
+                            opacity: 0,
+                            y: 20
+                        });
+                        
+                        gsap.to(text.words, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.5,
+                            ease: "power1.out",
+                            stagger: 0.02,
+                            scrollTrigger: {
+                                trigger: el,
+                                start: "top 85%",
+                                toggleActions: "play none none none"
+                            }
+                        });
+                    } catch (stErr) {
+                        gsap.set(el, { opacity: 0, y: 30 });
+                        gsap.to(el, { opacity: 1, y: 0, duration: 0.6 });
+                    }
+                } else {
+                    gsap.set(el, {
+                        opacity: 0,
+                        y: 40
+                    });
+                    
+                    gsap.to(el, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.7,
+                        ease: "power2.out",
+                        scrollTrigger: {
+                            trigger: el,
+                            start: "top 88%",
+                            toggleActions: "play none none none"
+                        }
+                    });
+                }
+            });
+
+            // Staggered entrance for services section cards
+            const servicesGrid = document.querySelector('.services-grid-premium');
+            if (servicesGrid) {
+                const cards = servicesGrid.querySelectorAll('.service-card-premium');
+                gsap.set(cards, {
+                    opacity: 0,
+                    y: 50,
+                    scale: 0.9,
+                    rotation: -2
+                });
+                
+                gsap.to(cards, {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    rotation: 0,
+                    duration: 0.8,
+                    ease: "back.out(1.2)",
+                    stagger: 0.12,
+                    scrollTrigger: {
+                        trigger: servicesGrid,
+                        start: "top 85%",
+                        toggleActions: "play none none none"
+                    }
+                });
+            }
+        } catch (err) {
+            console.warn("[ANIMATION MOTOR] Error in GSAP animations:", err);
+        }
+    }
+    
+    // Interactive 3D Perspective Rotation for Cards (Desktop mouse only)
+    if (!cards3dInitialized) {
+        cards3dInitialized = true;
+        const cards3d = document.querySelectorAll('.service-3d-card, .testimonial-3d-card, .service-card-premium');
+        cards3d.forEach(card => {
+            card.addEventListener('mousemove', function(e) {
+                if (currentDeviceMode === 'mobile' || getDeviceContext().isTouch) return;
+                
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const xc = rect.width / 2;
+                const yc = rect.height / 2;
+                
+                const rotateX = ((yc - y) / yc) * 8;
+                const rotateY = ((x - xc) / xc) * 8;
+                
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(this, {
+                        rotateX: rotateX,
+                        rotateY: rotateY,
+                        duration: 0.3,
+                        ease: "power1.out"
+                    });
+                }
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                if (currentDeviceMode === 'mobile' || getDeviceContext().isTouch) return;
+                
+                const isLeft = this.classList.contains('rotate-left');
+                const isRight = this.classList.contains('rotate-right');
+                const isOpposite = this.classList.contains('rotate-opposite');
+                let baseRotateZ = 0;
+                
+                if (isLeft) baseRotateZ = -1.5;
+                if (isRight) baseRotateZ = 1.5;
+                if (isOpposite) baseRotateZ = -1;
+                
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(this, {
+                        rotateX: 0,
+                        rotateY: 0,
+                        rotateZ: baseRotateZ,
+                        duration: 0.5,
+                        ease: "power2.out"
+                    });
+                }
+            });
+        });
+    }
+}
+
+// Master Device Mode Evaluator
+function applyDeviceMode(isInitial = false) {
     const device = getDeviceContext();
+    if (!isInitial && currentDeviceMode === device.type) {
+        return; // No change in classification
+    }
+    
+    currentDeviceMode = device.type;
     document.documentElement.classList.toggle('is-mobile-device', device.isMobile);
     document.documentElement.classList.toggle('is-desktop-device', !device.isMobile);
     document.documentElement.classList.toggle('is-touch-device', device.isTouch);
     
-    console.log(`[DEVICE MOTOR] Modo detectado: ${device.type.toUpperCase()} (Touch: ${device.isTouch}, Ancho: ${window.innerWidth}px)`);
+    console.log(`[DEVICE MOTOR] Modo detectado / actualizado: ${device.type.toUpperCase()} (Touch: ${device.isTouch}, Ancho: ${window.innerWidth}px)`);
     
     // Register GSAP plugins safely
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
@@ -231,205 +459,76 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     if (device.isMobile) {
-        console.log("[ANIMATION MOTOR] Teléfono / Móvil activo: Modo Ligero 60fps con IntersectionObserver nativo.");
-        
-        // Disable ScrollTrigger global tracking to save CPU and battery
-        if (typeof ScrollTrigger !== 'undefined') {
-            try {
-                ScrollTrigger.getAll().forEach(t => t.kill());
-            } catch (err) {
-                console.warn("[ANIMATION MOTOR] Error killing ScrollTriggers:", err);
-            }
-        }
-        
-        // Set up CSS reveal animations via lightweight IntersectionObserver
-        if (typeof IntersectionObserver !== 'undefined') {
-            const mobileAnimationObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('gsap-active');
-                        mobileAnimationObserver.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -30px 0px'
-            });
-            
-            document.querySelectorAll('[animate], .service-card-premium').forEach(el => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(24px)';
-                el.style.transition = 'opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
-                el.classList.add('gsap-target');
-                mobileAnimationObserver.observe(el);
-            });
-            
-            const styleSheet = document.createElement("style");
-            styleSheet.innerText = `
-                .gsap-target.gsap-active {
-                    opacity: 1 !important;
-                    transform: translateY(0) !important;
-                }
-            `;
-            document.head.appendChild(styleSheet);
-        }
-        
+        setupMobileMode(device);
     } else {
-        console.log("[ANIMATION MOTOR] PC / Computadora de Escritorio activa: Lenis Smooth Scroll + GSAP Timeline + Efectos 3D.");
-        
-        // Initialize Lenis Scroll safely for Desktop
-        if (typeof Lenis !== 'undefined' && !device.prefersReducedMotion) {
-            try {
-                lenisInstance = new Lenis({
-                    lerp: 0.09,
-                    wheelMultiplier: 0.7,
-                    smoothWheel: true,
-                    gestureOrientation: 'vertical'
-                });
-                
-                if (typeof ScrollTrigger !== 'undefined') {
-                    lenisInstance.on('scroll', () => {
-                        ScrollTrigger.update();
-                    });
-                }
-                
-                if (typeof gsap !== 'undefined') {
-                    gsap.ticker.add((time) => {
-                        lenisInstance.raf(time * 1000);
-                    });
-                    gsap.ticker.lagSmoothing(0);
-                }
-            } catch (err) {
-                console.warn("[ANIMATION MOTOR] Error initializing Lenis:", err);
-            }
-        }
-        
-        // Initialize text revelations using SplitType and GSAP ScrollTrigger
-        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-            try {
-                const animateElements = document.querySelectorAll('[animate]');
-                
-                animateElements.forEach(el => {
-                    if ((el.tagName === 'H1' || el.tagName === 'H2' || el.classList.contains('hero-subtext')) && typeof SplitType !== 'undefined' && !device.prefersReducedMotion) {
-                        try {
-                            const text = new SplitType(el, { types: 'lines, words' });
-                            
-                            gsap.set(text.words, {
-                                opacity: 0,
-                                y: 20
-                            });
-                            
-                            gsap.to(text.words, {
-                                opacity: 1,
-                                y: 0,
-                                duration: 0.5,
-                                ease: "power1.out",
-                                stagger: 0.02,
-                                scrollTrigger: {
-                                    trigger: el,
-                                    start: "top 85%",
-                                    toggleActions: "play none none none"
-                                }
-                            });
-                        } catch (stErr) {
-                            gsap.set(el, { opacity: 0, y: 30 });
-                            gsap.to(el, { opacity: 1, y: 0, duration: 0.6 });
-                        }
-                    } else {
-                        gsap.set(el, {
-                            opacity: 0,
-                            y: 40
-                        });
-                        
-                        gsap.to(el, {
-                            opacity: 1,
-                            y: 0,
-                            duration: 0.7,
-                            ease: "power2.out",
-                            scrollTrigger: {
-                                trigger: el,
-                                start: "top 88%",
-                                toggleActions: "play none none none"
-                            }
-                        });
-                    }
-                });
+        setupDesktopMode(device);
+    }
+}
 
-                // Staggered entrance for services section cards
-                const servicesGrid = document.querySelector('.services-grid-premium');
-                if (servicesGrid) {
-                    const cards = servicesGrid.querySelectorAll('.service-card-premium');
-                    gsap.set(cards, {
-                        opacity: 0,
-                        y: 50,
-                        scale: 0.9,
-                        rotation: -2
-                    });
-                    
-                    gsap.to(cards, {
-                        opacity: 1,
-                        y: 0,
-                        scale: 1,
-                        rotation: 0,
-                        duration: 0.8,
-                        ease: "back.out(1.2)",
-                        stagger: 0.12,
-                        scrollTrigger: {
-                            trigger: servicesGrid,
-                            start: "top 85%",
-                            toggleActions: "play none none none"
-                        }
-                    });
-                }
-                
-                // Interactive 3D Perspective Rotation for Cards (Desktop mouse only)
-                if (!device.isTouch) {
-                    const cards3d = document.querySelectorAll('.service-3d-card, .testimonial-3d-card, .service-card-premium');
-                    cards3d.forEach(card => {
-                        card.addEventListener('mousemove', function(e) {
-                            const rect = this.getBoundingClientRect();
-                            const x = e.clientX - rect.left;
-                            const y = e.clientY - rect.top;
-                            
-                            const xc = rect.width / 2;
-                            const yc = rect.height / 2;
-                            
-                            const rotateX = ((yc - y) / yc) * 8;
-                            const rotateY = ((x - xc) / xc) * 8;
-                            
-                            gsap.to(this, {
-                                rotateX: rotateX,
-                                rotateY: rotateY,
-                                duration: 0.3,
-                                ease: "power1.out"
-                            });
-                        });
-                        
-                        card.addEventListener('mouseleave', function() {
-                            const isLeft = this.classList.contains('rotate-left');
-                            const isRight = this.classList.contains('rotate-right');
-                            const isOpposite = this.classList.contains('rotate-opposite');
-                            let baseRotateZ = 0;
-                            
-                            if (isLeft) baseRotateZ = -1.5;
-                            if (isRight) baseRotateZ = 1.5;
-                            if (isOpposite) baseRotateZ = -1;
-                            
-                            gsap.to(this, {
-                                rotateX: 0,
-                                rotateY: 0,
-                                rotateZ: baseRotateZ,
-                                duration: 0.5,
-                                ease: "power2.out"
-                            });
-                        });
-                    });
-                }
-            } catch (err) {
-                console.warn("[ANIMATION MOTOR] Error in GSAP animations:", err);
-            }
+// Debounced viewport resize and orientation change listener
+let resizeDebounceTimer = null;
+function handleViewportChange() {
+    clearTimeout(resizeDebounceTimer);
+    resizeDebounceTimer = setTimeout(() => {
+        applyDeviceMode(false);
+    }, 250);
+}
+
+window.addEventListener('resize', handleViewportChange, { passive: true });
+window.addEventListener('orientationchange', handleViewportChange, { passive: true });
+
+// Network-Conscious & Accessibility-Aware Hero Video Controller
+function initHeroVideo() {
+    const video = document.querySelector('.hero-spine-video');
+    if (!video) return;
+
+    const device = getDeviceContext();
+    
+    // 1. Accessibility Check: Prefers-reduced-motion
+    if (device.prefersReducedMotion) {
+        console.log("[HERO VIDEO] 'prefers-reduced-motion: reduce' activo. Video pausado; mostrando póster estático.");
+        video.pause();
+        return;
+    }
+
+    // 2. Network Check: Data Saver & Slow Connection (2G / slow-2g)
+    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (conn) {
+        const isDataSaver = conn.saveData === true;
+        const isSlowNetwork = conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g';
+        
+        if (isDataSaver || isSlowNetwork) {
+            console.log(`[HERO VIDEO] Red lenta o Ahorro de Datos activo (saveData: ${isDataSaver}, effectiveType: ${conn.effectiveType}). Video no precargado; mostrando póster estático.`);
+            return;
         }
     }
+
+    // 3. Normal / Fast Connection: Set preload and start playback
+    try {
+        video.preload = 'auto';
+        video.load();
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(err => {
+                console.log("[HERO VIDEO] Autoplay en espera de interacción o diferido por el navegador:", err);
+            });
+        }
+    } catch (e) {
+        console.warn("[HERO VIDEO] Error al inicializar video del hero:", e);
+    }
+}
+
+// Master Initialization on DOM Loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Initialise form and conversion buttons
+    initAppointmentForm();
+    initSedeConversionButtons();
+    
+    // 2. Identify Device (PC vs Mobile Phone)
+    applyDeviceMode(true);
+
+    // 3. Network-Conscious Hero Video Init
+    initHeroVideo();
 });
 
 // Close modal on ESC key

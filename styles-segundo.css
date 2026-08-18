@@ -1602,3 +1602,408 @@ h1, h2, h3, h4, .hero-headline {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
+
+/* Background scroll lock when modal or drawer is active */
+html.drawer-lock-scroll,
+body.drawer-lock-scroll {
+    overflow: hidden !important;
+    height: 100% !important;
+}
+
+/* === SMART FLOATING FEEDBACK TAB & DRAWER === */
+
+/* Floating Vertical Side Tab Trigger */
+.feedback-tab-trigger {
+    position: fixed;
+    right: 0;
+    top: 46%;
+    transform: translateY(-50%);
+    z-index: 995;
+    background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-right: none;
+    border-radius: 12px 0 0 12px;
+    padding: 14px 9px 16px 9px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    box-shadow: -4px 0 18px rgba(16, 185, 129, 0.45);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease, background 0.3s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+.feedback-tab-trigger:hover {
+    transform: translateY(-50%) translateX(-4px);
+    box-shadow: -6px 0 25px rgba(16, 185, 129, 0.65);
+    background: linear-gradient(180deg, #34d399 0%, #10b981 100%);
+}
+.feedback-tab-trigger:active {
+    transform: translateY(-50%) translateX(-2px) scale(0.98);
+}
+.feedback-tab-trigger .tab-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    animation: starPulse 2.5s ease-in-out infinite;
+}
+@keyframes starPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+.feedback-tab-trigger .tab-text {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Feedback Drawer Overlay */
+.feedback-drawer-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    visibility: hidden;
+    pointer-events: none;
+    transition: visibility 0.35s ease;
+    overscroll-behavior: contain;
+}
+.feedback-drawer-overlay.active {
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Backdrop */
+.feedback-drawer-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.feedback-drawer-overlay.active .feedback-drawer-backdrop {
+    opacity: 1;
+}
+
+/* Drawer Side Panel (Desktop default) */
+.feedback-drawer-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 490px;
+    height: 100%;
+    background: #0f1012;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: -12px 0 40px rgba(0, 0, 0, 0.8);
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 36px 28px 40px 28px;
+    display: flex;
+    flex-direction: column;
+}
+.feedback-drawer-overlay.active .feedback-drawer-panel {
+    transform: translateX(0);
+}
+
+/* Close Button */
+.feedback-drawer-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: var(--text-light-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    z-index: 10;
+    touch-action: manipulation;
+}
+.feedback-drawer-close:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    transform: scale(1.08);
+}
+
+/* Content Container Inside Drawer */
+.feedback-drawer-content {
+    margin-top: 10px;
+    text-align: center;
+    position: relative;
+}
+.feedback-drawer-content::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 260px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0) 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+.feedback-title {
+    font-size: clamp(1.4rem, 3.5vw, 1.8rem);
+    margin-top: 16px;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+}
+.feedback-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    max-width: 400px;
+    margin: 0 auto 24px auto;
+    line-height: 1.45;
+    position: relative;
+    z-index: 1;
+}
+.feedback-rating-scale {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+    position: relative;
+    z-index: 1;
+}
+.feedback-emoji-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 10px 6px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    max-width: 76px;
+    min-width: 52px;
+    min-height: 66px;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+.feedback-emoji-btn:hover {
+    transform: translateY(-3px) scale(1.06);
+    background: rgba(16, 185, 129, 0.12);
+    border-color: #10b981;
+    box-shadow: 0 0 18px rgba(16, 185, 129, 0.35);
+}
+.feedback-emoji-btn:active {
+    transform: scale(0.96);
+}
+.feedback-emoji-btn.active {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: #10b981;
+    box-shadow: 0 0 22px rgba(16, 185, 129, 0.45);
+    transform: translateY(-2px) scale(1.04);
+}
+.feedback-emoji-btn .emoji-icon {
+    font-size: 2rem;
+    line-height: 1;
+    display: inline-block;
+    transition: transform 0.25s ease;
+}
+.feedback-emoji-btn:hover .emoji-icon {
+    transform: scale(1.12);
+}
+.feedback-emoji-btn .emoji-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+}
+.feedback-emoji-btn:hover .emoji-label,
+.feedback-emoji-btn.active .emoji-label {
+    color: #34d399;
+}
+
+/* Google Redirect Notice */
+.feedback-google-redirect {
+    margin-top: 24px;
+    padding: 24px 20px;
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 16px;
+    animation: fadeInSlideUp 0.35s ease;
+    text-align: center;
+}
+.feedback-redirect-icon {
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+}
+.feedback-google-redirect h4 {
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+    color: #ffffff;
+}
+.feedback-google-redirect p {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    max-width: 380px;
+    margin: 0 auto 18px auto;
+    line-height: 1.45;
+}
+
+/* Feedback Form Wrapper */
+.feedback-form-wrapper {
+    margin-top: 24px;
+    padding: 22px 18px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    text-align: left;
+    animation: fadeInSlideUp 0.35s ease;
+}
+.feedback-form-header {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.feedback-form-header h4 {
+    font-size: 1.1rem;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+.feedback-form-header p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+.feedback-form-header strong {
+    color: #34d399;
+}
+.optional-tag {
+    color: var(--text-muted);
+    font-size: 0.8em;
+    font-weight: 400;
+}
+
+/* Thank You State */
+.feedback-thankyou-state {
+    margin-top: 24px;
+    padding: 28px 20px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    border-radius: 16px;
+    text-align: center;
+    animation: fadeInSlideUp 0.35s ease;
+}
+.thankyou-check-icon {
+    width: 54px;
+    height: 54px;
+    background: rgba(16, 185, 129, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px auto;
+    box-shadow: 0 0 18px rgba(16, 185, 129, 0.3);
+}
+.feedback-thankyou-state h4 {
+    font-size: 1.2rem;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+.feedback-thankyou-state p {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    max-width: 380px;
+    margin: 0 auto;
+    line-height: 1.45;
+}
+
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Responsiveness (Bottom Sheet / Modal style) */
+@media (max-width: 766px) {
+    .feedback-tab-trigger {
+        top: 45%;
+        padding: 10px 7px 12px 7px;
+        border-radius: 10px 0 0 10px;
+    }
+    .feedback-tab-trigger .tab-text {
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+    }
+    .feedback-drawer-panel {
+        top: auto;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        max-width: 100%;
+        width: 100%;
+        max-height: 88vh;
+        border-radius: 24px 24px 0 0;
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        transform: translateY(100%);
+        padding: 30px 18px 32px 18px;
+    }
+    .feedback-drawer-overlay.active .feedback-drawer-panel {
+        transform: translateY(0);
+    }
+    .feedback-rating-scale {
+        gap: 8px;
+    }
+    .feedback-emoji-btn {
+        padding: 10px 8px;
+        min-width: 56px;
+        min-height: 62px;
+    }
+    .feedback-emoji-btn .emoji-icon {
+        font-size: 1.7rem;
+    }
+    .feedback-emoji-btn .emoji-label {
+        font-size: 0.68rem;
+    }
+}
+@media (max-width: 360px) {
+    .feedback-rating-scale {
+        gap: 5px;
+    }
+    .feedback-emoji-btn {
+        padding: 8px 6px;
+        min-width: 48px;
+        min-height: 56px;
+    }
+    .feedback-emoji-btn .emoji-icon {
+        font-size: 1.45rem;
+    }
+    .feedback-emoji-btn .emoji-label {
+        font-size: 0.62rem;
+    }
+}

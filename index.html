@@ -760,8 +760,8 @@
                     </div>
                 </div></div>
             </div>
-<div class="swiper-pagination testimonials-pagination"></div>
-</div>
+            <div class="swiper-pagination testimonials-pagination"></div>
+            </div>
         </div>
     </section>
 
@@ -944,6 +944,112 @@
         });
     </script>
     
+    <!-- Floating Feedback Vertical Side Tab Trigger -->
+    <button type="button" id="feedbackTabTrigger" class="feedback-tab-trigger" aria-label="Abrir panel de calificación y feedback" aria-expanded="false" title="Califícanos">
+        <span class="tab-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+        </span>
+        <span class="tab-text">Califícanos</span>
+    </button>
+
+    <!-- Feedback Drawer Modal / Sheet -->
+    <div id="feedbackDrawerOverlay" class="feedback-drawer-overlay" aria-hidden="true" data-lenis-prevent="true">
+        <div class="feedback-drawer-backdrop" id="feedbackDrawerBackdrop"></div>
+        <div class="feedback-drawer-panel" id="feedbackDrawerPanel" role="dialog" aria-modal="true" aria-labelledby="feedbackDrawerTitle" data-lenis-prevent="true">
+            <!-- Close Button -->
+            <button type="button" class="feedback-drawer-close" id="feedbackDrawerClose" aria-label="Cerrar panel de calificación">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="feedback-drawer-content">
+                <div class="badge-tag green">
+                    Tu Opinión Nos Importa
+                </div>
+                <h3 class="feedback-title" id="feedbackDrawerTitle">¿Cómo fue tu experiencia con nosotros?</h3>
+                <p class="feedback-subtitle">
+                    Selecciona una opción para ayudarnos a mantener la excelencia médica y la mejor atención en cada consulta.
+                </p>
+
+                <!-- 5-Face Emoji Rating Scale -->
+                <div class="feedback-rating-scale" id="feedback-emoji-scale" role="radiogroup" aria-label="Escala de satisfacción">
+                    <button type="button" class="feedback-emoji-btn" data-rating="1" data-label="Muy mala" aria-label="Muy mala experiencia" title="Muy mala">
+                        <span class="emoji-icon">😠</span>
+                        <span class="emoji-label">Muy mala</span>
+                    </button>
+                    <button type="button" class="feedback-emoji-btn" data-rating="2" data-label="Mala" aria-label="Mala experiencia" title="Mala">
+                        <span class="emoji-icon">😕</span>
+                        <span class="emoji-label">Mala</span>
+                    </button>
+                    <button type="button" class="feedback-emoji-btn" data-rating="3" data-label="Regular" aria-label="Experiencia regular" title="Regular">
+                        <span class="emoji-icon">😐</span>
+                        <span class="emoji-label">Regular</span>
+                    </button>
+                    <button type="button" class="feedback-emoji-btn" data-rating="4" data-label="Buena" aria-label="Buena experiencia" title="Buena">
+                        <span class="emoji-icon">🙂</span>
+                        <span class="emoji-label">Buena</span>
+                    </button>
+                    <button type="button" class="feedback-emoji-btn" data-rating="5" data-label="Excelente" aria-label="Excelente experiencia" title="Excelente">
+                        <span class="emoji-icon">😄</span>
+                        <span class="emoji-label">Excelente</span>
+                    </button>
+                </div>
+
+                <!-- Google Review Redirect Container (for ratings 4 & 5) -->
+                <div class="feedback-google-redirect" id="feedback-google-notice" style="display: none;">
+                    <div class="feedback-redirect-icon">🌟</div>
+                    <h4>¡Nos alegra mucho que hayas tenido una gran experiencia!</h4>
+                    <p>Tu reseña en Google Maps ayuda a que más pacientes con dolor encuentren alivio y tratamiento especializado.</p>
+                    <a href="#" class="btn-elastic btn-green" id="feedback-google-btn" target="_blank" rel="noopener noreferrer" style="display: inline-flex; padding: 14px 28px;">
+                        <span>⭐ Compartir Reseña en Google</span>
+                    </a>
+                </div>
+
+                <!-- Inline Feedback Form (for ratings 1, 2, 3) -->
+                <div class="feedback-form-wrapper" id="feedback-form-container" style="display: none;">
+                    <div class="feedback-form-header">
+                        <h4>Queremos escucharte y mejorar</h4>
+                        <p id="feedback-selected-status">Calificación seleccionada: <strong id="feedback-selected-label">Regular</strong></p>
+                    </div>
+                    <form id="internalFeedbackForm" class="feedback-form">
+                        <input type="hidden" id="feedback-rating-val" value="3">
+                        <input type="hidden" id="feedback-label-val" value="Regular">
+                        
+                        <div class="form-group-premium">
+                            <label for="feedback-comment">¿En qué podemos mejorar? Cuéntanos tu experiencia <span style="color: #34d399;">*</span></label>
+                            <textarea id="feedback-comment" class="form-input-premium" rows="3" placeholder="Describe qué ocurrió o qué sugerencia tienes para nuestro equipo clínico..." required></textarea>
+                        </div>
+                        
+                        <div class="form-group-premium">
+                            <label for="feedback-contact">Teléfono o Correo Electrónico <span class="optional-tag">(Opcional)</span></label>
+                            <input type="text" id="feedback-contact" class="form-input-premium" placeholder="Ej: 7777-7777 o correo@ejemplo.com">
+                        </div>
+                        
+                        <button type="submit" class="btn-elastic btn-green" id="feedback-submit-btn" style="width: 100%; padding: 16px 24px;">
+                            <span>Enviar Comentario</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Thank You State (shown after submission) -->
+                <div class="feedback-thankyou-state" id="feedback-thankyou" style="display: none;">
+                    <div class="thankyou-check-icon">
+                        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h4>¡Gracias por tu comentario!</h4>
+                    <p>Valoramos sinceramente tu retroalimentación y la tomaremos en cuenta para seguir optimizando la atención de todos nuestros pacientes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Floating WhatsApp Button -->
     <a href="https://wa.me/50322161866?text=Hola%20Doctor%20Portillo,%20necesito%20agendar%20una%20consulta." target="_blank" class="floating-wa-btn" aria-label="Contactar por WhatsApp">
         <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">

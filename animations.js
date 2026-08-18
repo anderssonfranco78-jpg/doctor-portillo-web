@@ -518,6 +518,221 @@ function initHeroVideo() {
     }
 }
 
+// =============================================================================
+// SMART FEEDBACK & REVIEW FUNNEL CONFIGURATION & CONTROLLER
+// =============================================================================
+// TODO: Reemplazar con el enlace real de reseñas de Google Maps de la clínica una vez recolectado
+const GOOGLE_REVIEW_URL = "PLACEHOLDER_GOOGLE_REVIEW_LINK";
+
+// TODO: Reemplazar con la URL real del webhook de n8n para registro de feedback en backend/NocoDB
+const FEEDBACK_WEBHOOK_URL = "PLACEHOLDER_N8N_WEBHOOK_URL";
+
+function openFeedbackDrawer() {
+    const overlay = document.getElementById('feedbackDrawerOverlay');
+    const trigger = document.getElementById('feedbackTabTrigger');
+    if (overlay) {
+        overlay.classList.add('active');
+        overlay.setAttribute('aria-hidden', 'false');
+    }
+    if (trigger) {
+        trigger.setAttribute('aria-expanded', 'true');
+    }
+    
+    // Stop Lenis smooth scroll on the main page so mousewheel & trackpad scroll inside drawer
+    if (lenisInstance) {
+        lenisInstance.stop();
+    }
+    document.documentElement.classList.add('drawer-lock-scroll');
+    document.body.classList.add('drawer-lock-scroll');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeFeedbackDrawer() {
+    const overlay = document.getElementById('feedbackDrawerOverlay');
+    const trigger = document.getElementById('feedbackTabTrigger');
+    if (overlay) {
+        overlay.classList.remove('active');
+        overlay.setAttribute('aria-hidden', 'true');
+    }
+    if (trigger) {
+        trigger.setAttribute('aria-expanded', 'false');
+    }
+    
+    // Reactivate Lenis smooth scroll on the main page
+    if (lenisInstance) {
+        lenisInstance.start();
+    }
+    document.documentElement.classList.remove('drawer-lock-scroll');
+    document.body.classList.remove('drawer-lock-scroll');
+    
+    const symptomModal = document.getElementById('symptomDetailModal');
+    if (!symptomModal || !symptomModal.classList.contains('active')) {
+        document.body.style.overflow = '';
+    }
+}
+
+function initFeedbackFunnel() {
+    const tabTrigger = document.getElementById('feedbackTabTrigger');
+    const overlay = document.getElementById('feedbackDrawerOverlay');
+    const closeBtn = document.getElementById('feedbackDrawerClose');
+    const backdrop = document.getElementById('feedbackDrawerBackdrop');
+    const emojiScale = document.getElementById('feedback-emoji-scale');
+
+    if (tabTrigger) {
+        tabTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (overlay && overlay.classList.contains('active')) {
+                closeFeedbackDrawer();
+            } else {
+                openFeedbackDrawer();
+            }
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeFeedbackDrawer();
+        });
+    }
+
+    if (backdrop) {
+        backdrop.addEventListener('click', () => {
+            closeFeedbackDrawer();
+        });
+    }
+
+    if (!emojiScale) return;
+
+    const emojiButtons = emojiScale.querySelectorAll('.feedback-emoji-btn');
+    const googleNotice = document.getElementById('feedback-google-notice');
+    const googleBtn = document.getElementById('feedback-google-btn');
+    const formContainer = document.getElementById('feedback-form-container');
+    const internalForm = document.getElementById('internalFeedbackForm');
+    const thankyouState = document.getElementById('feedback-thankyou');
+    const selectedLabel = document.getElementById('feedback-selected-label');
+    const ratingInput = document.getElementById('feedback-rating-val');
+    const labelInput = document.getElementById('feedback-label-val');
+
+    // Emoji button click handler
+    emojiButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const rating = parseInt(btn.getAttribute('data-rating'), 10);
+            const label = btn.getAttribute('data-label');
+
+            // Set active state on button
+            emojiButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Hide thank-you if previously shown
+            if (thankyouState) thankyouState.style.display = 'none';
+
+            if (rating >= 4) {
+                // Happy experience (4 or 5): Funnel to Google Reviews
+                if (formContainer) formContainer.style.display = 'none';
+                
+                if (GOOGLE_REVIEW_URL && GOOGLE_REVIEW_URL !== "PLACEHOLDER_GOOGLE_REVIEW_LINK" && GOOGLE_REVIEW_URL.startsWith("http")) {
+                    window.open(GOOGLE_REVIEW_URL, '_blank', 'noopener,noreferrer');
+                }
+                
+                if (googleNotice) {
+                    googleNotice.style.display = 'block';
+                    if (googleBtn) {
+                        if (GOOGLE_REVIEW_URL && GOOGLE_REVIEW_URL !== "PLACEHOLDER_GOOGLE_REVIEW_LINK") {
+                            googleBtn.href = GOOGLE_REVIEW_URL;
+                        } else {
+                            googleBtn.href = "#";
+                            googleBtn.onclick = (e) => {
+                                e.preventDefault();
+                                console.log("[FEEDBACK FUNNEL] Clic en botón de Google Review (URL placeholder activa: " + GOOGLE_REVIEW_URL + ")");
+                            };
+                        }
+                    }
+                }
+                console.log(`[FEEDBACK FUNNEL] Calificación positiva seleccionada: ${label} (${rating}/5). Funnel a Google Reviews.`);
+            } else {
+                // Unsatisfied / Neutral experience (1, 2, or 3): Open internal feedback form
+                if (googleNotice) googleNotice.style.display = 'none';
+                
+                if (ratingInput) ratingInput.value = rating;
+                if (labelInput) labelInput.value = label;
+                if (selectedLabel) {
+                    const icon = btn.querySelector('.emoji-icon')?.textContent || '';
+                    selectedLabel.textContent = `${label} (${rating}/5) ${icon}`;
+                }
+                
+                if (formContainer) {
+                    formContainer.style.display = 'block';
+                    const drawerPanel = document.getElementById('feedbackDrawerPanel');
+                    const textarea = formContainer.querySelector('textarea');
+                    setTimeout(() => {
+                        if (drawerPanel) {
+                            drawerPanel.scrollTo({ top: formContainer.offsetTop - 20, behavior: 'smooth' });
+                        }
+                        if (textarea) {
+                            textarea.focus();
+                        }
+                    }, 100);
+                }
+                console.log(`[FEEDBACK FUNNEL] Calificación neutra/crítica seleccionada: ${label} (${rating}/5). Mostrando formulario interno.`);
+            }
+        });
+    });
+
+    // Form submission handler
+    if (internalForm) {
+        internalForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const ratingVal = ratingInput ? parseInt(ratingInput.value, 10) : 3;
+            const labelVal = labelInput ? labelInput.value.toLowerCase() : "regular";
+            const commentVal = document.getElementById('feedback-comment')?.value.trim() || "";
+            const contactVal = document.getElementById('feedback-contact')?.value.trim() || "No proporcionado";
+
+            const payload = {
+                fecha_hora: new Date().toISOString(),
+                calificacion: labelVal,
+                calificacion_num: ratingVal,
+                comentario: commentVal,
+                contacto: contactVal
+            };
+
+            const submitBtn = document.getElementById('feedback-submit-btn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>Enviando comentario...</span>';
+            }
+
+            // POST to webhook (graceful handling for placeholder / network error)
+            const postPromise = (FEEDBACK_WEBHOOK_URL && FEEDBACK_WEBHOOK_URL !== "PLACEHOLDER_N8N_WEBHOOK_URL" && FEEDBACK_WEBHOOK_URL.startsWith("http"))
+                ? fetch(FEEDBACK_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+                : Promise.resolve({ ok: true, placeholder: true });
+
+            postPromise
+                .then(() => {
+                    console.log("[FEEDBACK WEBHOOK] Feedback registrado exitosamente:", payload);
+                })
+                .catch(err => {
+                    console.warn("[FEEDBACK WEBHOOK] Advertencia/Error de envío (manejado elegantemente):", err);
+                })
+                .finally(() => {
+                    // Show friendly thank-you state
+                    if (formContainer) formContainer.style.display = 'none';
+                    if (thankyouState) thankyouState.style.display = 'block';
+                    internalForm.reset();
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<span>Enviar Comentario</span>';
+                    }
+                });
+        });
+    }
+}
+
 // Master Initialization on DOM Loaded
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Initialise form and conversion buttons
@@ -529,12 +744,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Network-Conscious Hero Video Init
     initHeroVideo();
+
+    // 4. Smart Feedback Funnel Init
+    initFeedbackFunnel();
 });
 
-// Close modal on ESC key
+// Close modal & drawer on ESC key
 window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closeSymptomModal();
+        closeFeedbackDrawer();
     }
 });
 

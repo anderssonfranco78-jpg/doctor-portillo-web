@@ -1790,8 +1790,8 @@ body.drawer-lock-scroll {
     z-index: 1;
 }
 .feedback-emoji-btn {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.16);
     border-radius: 14px;
     padding: 10px 6px;
     cursor: pointer;
@@ -1810,7 +1810,7 @@ body.drawer-lock-scroll {
 }
 .feedback-emoji-btn:hover {
     transform: translateY(-3px) scale(1.06);
-    background: rgba(16, 185, 129, 0.12);
+    background: rgba(16, 185, 129, 0.15);
     border-color: #10b981;
     box-shadow: 0 0 18px rgba(16, 185, 129, 0.35);
 }
@@ -1818,7 +1818,7 @@ body.drawer-lock-scroll {
     transform: scale(0.96);
 }
 .feedback-emoji-btn.active {
-    background: rgba(16, 185, 129, 0.2);
+    background: rgba(16, 185, 129, 0.25);
     border-color: #10b981;
     box-shadow: 0 0 22px rgba(16, 185, 129, 0.45);
     transform: translateY(-2px) scale(1.04);
@@ -1834,13 +1834,15 @@ body.drawer-lock-scroll {
 }
 .feedback-emoji-btn .emoji-label {
     font-size: 0.72rem;
-    font-weight: 500;
-    color: var(--text-muted);
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
     transition: color 0.2s ease;
 }
 .feedback-emoji-btn:hover .emoji-label,
 .feedback-emoji-btn.active .emoji-label {
     color: #34d399;
+    font-weight: 700;
 }
 
 /* Google Redirect Notice */

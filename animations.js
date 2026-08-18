@@ -550,12 +550,16 @@ function openFeedbackDrawer() {
 function closeFeedbackDrawer() {
     const overlay = document.getElementById('feedbackDrawerOverlay');
     const trigger = document.getElementById('feedbackTabTrigger');
+    const drawerPanel = document.getElementById('feedbackDrawerPanel');
     if (overlay) {
         overlay.classList.remove('active');
         overlay.setAttribute('aria-hidden', 'true');
     }
     if (trigger) {
         trigger.setAttribute('aria-expanded', 'false');
+    }
+    if (drawerPanel) {
+        drawerPanel.classList.remove('is-form-mode', 'is-positive-mode');
     }
     
     // Reactivate Lenis smooth scroll on the main page
@@ -574,6 +578,7 @@ function closeFeedbackDrawer() {
 function initFeedbackFunnel() {
     const tabTrigger = document.getElementById('feedbackTabTrigger');
     const overlay = document.getElementById('feedbackDrawerOverlay');
+    const drawerPanel = document.getElementById('feedbackDrawerPanel');
     const closeBtn = document.getElementById('feedbackDrawerClose');
     const backdrop = document.getElementById('feedbackDrawerBackdrop');
     const emojiScale = document.getElementById('feedback-emoji-scale');
@@ -627,8 +632,31 @@ function initFeedbackFunnel() {
             // Hide thank-you if previously shown
             if (thankyouState) thankyouState.style.display = 'none';
 
+            // Zero Vote Loss: Auto-register patient vote selection immediately in background
+            try {
+                const quickVotePayload = {
+                    fecha_hora: new Date().toISOString(),
+                    calificacion: label.toLowerCase(),
+                    calificacion_num: rating,
+                    comentario: rating >= 4 ? "(Redirigido a Google Review)" : "(Calificación registrada - En espera de comentario opcional)",
+                    contacto: "No proporcionado",
+                    tipo_registro: "seleccion_rapida"
+                };
+                if (FEEDBACK_WEBHOOK_URL && FEEDBACK_WEBHOOK_URL !== "PLACEHOLDER_N8N_WEBHOOK_URL" && FEEDBACK_WEBHOOK_URL.startsWith("http")) {
+                    fetch(FEEDBACK_WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(quickVotePayload)
+                    }).catch(() => {});
+                }
+            } catch (voteErr) {}
+
             if (rating >= 4) {
                 // Happy experience (4 or 5): Funnel to Google Reviews
+                if (drawerPanel) {
+                    drawerPanel.classList.add('is-positive-mode');
+                    drawerPanel.classList.remove('is-form-mode');
+                }
                 if (formContainer) formContainer.style.display = 'none';
                 
                 if (GOOGLE_REVIEW_URL && GOOGLE_REVIEW_URL !== "PLACEHOLDER_GOOGLE_REVIEW_LINK" && GOOGLE_REVIEW_URL.startsWith("http")) {
@@ -651,7 +679,11 @@ function initFeedbackFunnel() {
                 }
                 console.log(`[FEEDBACK FUNNEL] Calificación positiva seleccionada: ${label} (${rating}/5). Funnel a Google Reviews.`);
             } else {
-                // Unsatisfied / Neutral experience (1, 2, or 3): Open internal feedback form
+                // Unsatisfied / Neutral experience (1, 2, or 3): Open ultra-compact internal feedback form
+                if (drawerPanel) {
+                    drawerPanel.classList.add('is-form-mode');
+                    drawerPanel.classList.remove('is-positive-mode');
+                }
                 if (googleNotice) googleNotice.style.display = 'none';
                 
                 if (ratingInput) ratingInput.value = rating;
@@ -663,20 +695,37 @@ function initFeedbackFunnel() {
                 
                 if (formContainer) {
                     formContainer.style.display = 'block';
-                    const drawerPanel = document.getElementById('feedbackDrawerPanel');
                     const textarea = formContainer.querySelector('textarea');
                     setTimeout(() => {
-                        if (drawerPanel) {
-                            drawerPanel.scrollTo({ top: formContainer.offsetTop - 20, behavior: 'smooth' });
-                        }
                         if (textarea) {
                             textarea.focus();
                         }
-                    }, 100);
+                        if (drawerPanel) {
+                            drawerPanel.scrollTo({ top: drawerPanel.scrollHeight, behavior: 'smooth' });
+                        }
+                    }, 80);
                 }
-                console.log(`[FEEDBACK FUNNEL] Calificación neutra/crítica seleccionada: ${label} (${rating}/5). Mostrando formulario interno.`);
+                console.log(`[FEEDBACK FUNNEL] Calificación neutra/crítica seleccionada: ${label} (${rating}/5). Mostrando formulario compacto.`);
             }
         });
+    });
+
+    // Auto-scroll inside drawer when textarea or inputs are focused on mobile devices
+    const commentField = document.getElementById('feedback-comment');
+    const contactField = document.getElementById('feedback-contact');
+    [commentField, contactField].forEach(field => {
+        if (field) {
+            field.addEventListener('focus', () => {
+                if (drawerPanel) {
+                    setTimeout(() => {
+                        const submitBtn = document.getElementById('feedback-submit-btn');
+                        if (submitBtn) {
+                            submitBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    }, 200);
+                }
+            });
+        }
     });
 
     // Form submission handler
@@ -694,7 +743,8 @@ function initFeedbackFunnel() {
                 calificacion: labelVal,
                 calificacion_num: ratingVal,
                 comentario: commentVal,
-                contacto: contactVal
+                contacto: contactVal,
+                tipo_registro: "formulario_completo"
             };
 
             const submitBtn = document.getElementById('feedback-submit-btn');

@@ -967,11 +967,11 @@
             </button>
 
             <div class="feedback-drawer-content">
-                <div class="badge-tag green">
+                <div class="badge-tag green feedback-drawer-badge">
                     Tu Opinión Nos Importa
                 </div>
                 <h3 class="feedback-title" id="feedbackDrawerTitle">¿Cómo fue tu experiencia con nosotros?</h3>
-                <p class="feedback-subtitle">
+                <p class="feedback-subtitle" id="feedbackDrawerSubtitle">
                     Selecciona una opción para ayudarnos a mantener la excelencia médica y la mejor atención en cada consulta.
                 </p>
 
@@ -1012,24 +1012,22 @@
                 <!-- Inline Feedback Form (for ratings 1, 2, 3) -->
                 <div class="feedback-form-wrapper" id="feedback-form-container" style="display: none;">
                     <div class="feedback-form-header">
-                        <h4>Queremos escucharte y mejorar</h4>
-                        <p id="feedback-selected-status">Calificación seleccionada: <strong id="feedback-selected-label">Regular</strong></p>
+                        <h4>¿En qué podemos mejorar?</h4>
+                        <p id="feedback-selected-status">Calificación: <strong id="feedback-selected-label">Regular</strong></p>
                     </div>
                     <form id="internalFeedbackForm" class="feedback-form">
                         <input type="hidden" id="feedback-rating-val" value="3">
                         <input type="hidden" id="feedback-label-val" value="Regular">
                         
-                        <div class="form-group-premium">
-                            <label for="feedback-comment">¿En qué podemos mejorar? Cuéntanos tu experiencia <span style="color: #34d399;">*</span></label>
-                            <textarea id="feedback-comment" class="form-input-premium" rows="3" placeholder="Describe qué ocurrió o qué sugerencia tienes para nuestro equipo clínico..." required></textarea>
+                        <div class="form-group-compact">
+                            <textarea id="feedback-comment" class="form-input-premium feedback-compact-textarea" rows="2" placeholder="Escribe aquí qué ocurrió o qué sugerencia tienes..." required></textarea>
                         </div>
                         
-                        <div class="form-group-premium">
-                            <label for="feedback-contact">Teléfono o Correo Electrónico <span class="optional-tag">(Opcional)</span></label>
-                            <input type="text" id="feedback-contact" class="form-input-premium" placeholder="Ej: 7777-7777 o correo@ejemplo.com">
+                        <div class="form-group-compact">
+                            <input type="text" id="feedback-contact" class="form-input-premium feedback-compact-input" placeholder="Teléfono o correo (opcional)">
                         </div>
                         
-                        <button type="submit" class="btn-elastic btn-green" id="feedback-submit-btn" style="width: 100%; padding: 16px 24px;">
+                        <button type="submit" class="btn-elastic btn-green feedback-submit-btn-prominent" id="feedback-submit-btn" style="width: 100%;">
                             <span>Enviar Comentario</span>
                         </button>
                     </form>

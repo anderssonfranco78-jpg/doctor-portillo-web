@@ -1870,37 +1870,65 @@ body.drawer-lock-scroll {
     line-height: 1.45;
 }
 
-/* Feedback Form Wrapper */
-.feedback-form-wrapper {
-    margin-top: 24px;
-    padding: 22px 18px;
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    text-align: left;
-    animation: fadeInSlideUp 0.35s ease;
+/* Active Form Mode — Ultra-Compact & Keyboard-Friendly */
+.feedback-drawer-panel.is-form-mode .feedback-drawer-badge,
+.feedback-drawer-panel.is-form-mode .feedback-subtitle {
+    display: none !important;
 }
-.feedback-form-header {
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+.feedback-drawer-panel.is-form-mode .feedback-title {
+    font-size: 1.15rem;
+    margin: 0 0 10px 0;
 }
-.feedback-form-header h4 {
-    font-size: 1.1rem;
-    color: #ffffff;
-    margin-bottom: 4px;
+.feedback-drawer-panel.is-form-mode .feedback-rating-scale {
+    gap: 8px;
+    margin-bottom: 6px;
 }
-.feedback-form-header p {
-    font-size: 0.82rem;
-    color: var(--text-muted);
+.feedback-drawer-panel.is-form-mode .feedback-emoji-btn {
+    min-height: 48px;
+    padding: 6px 4px;
 }
-.feedback-form-header strong {
-    color: #34d399;
+.feedback-drawer-panel.is-form-mode .feedback-emoji-btn .emoji-icon {
+    font-size: 1.35rem;
 }
-.optional-tag {
-    color: var(--text-muted);
-    font-size: 0.8em;
-    font-weight: 400;
+.feedback-drawer-panel.is-form-mode .feedback-emoji-btn .emoji-label {
+    font-size: 0.65rem;
+}
+.feedback-drawer-panel.is-form-mode .feedback-form-wrapper {
+    margin-top: 10px;
+    padding: 16px 14px;
+}
+.feedback-drawer-panel.is-form-mode .feedback-form-header {
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+}
+.feedback-drawer-panel.is-form-mode .feedback-form-header h4 {
+    font-size: 0.95rem;
+}
+.feedback-drawer-panel.is-form-mode .feedback-form-header p {
+    font-size: 0.78rem;
+}
+.form-group-compact {
+    margin-bottom: 10px;
+}
+.feedback-compact-textarea {
+    min-height: 58px;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    resize: none;
+    line-height: 1.4;
+    border-radius: 12px;
+}
+.feedback-compact-input {
+    padding: 9px 12px;
+    font-size: 0.88rem;
+    border-radius: 12px;
+}
+.feedback-submit-btn-prominent {
+    padding: 13px 20px !important;
+    font-size: 0.95rem !important;
+    font-weight: 600;
+    margin-top: 4px;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
 }
 
 /* Thank You State */
@@ -1966,12 +1994,16 @@ body.drawer-lock-scroll {
         left: 0;
         max-width: 100%;
         width: 100%;
-        max-height: 88vh;
+        max-height: 90vh;
         border-radius: 24px 24px 0 0;
         border-left: none;
         border-top: 1px solid rgba(255, 255, 255, 0.12);
         transform: translateY(100%);
-        padding: 30px 18px 32px 18px;
+        padding: 26px 16px 28px 16px;
+    }
+    .feedback-drawer-panel.is-form-mode {
+        padding: 18px 14px 22px 14px;
+        max-height: 94vh;
     }
     .feedback-drawer-overlay.active .feedback-drawer-panel {
         transform: translateY(0);
@@ -1980,30 +2012,42 @@ body.drawer-lock-scroll {
         gap: 8px;
     }
     .feedback-emoji-btn {
-        padding: 10px 8px;
-        min-width: 56px;
-        min-height: 62px;
+        padding: 10px 6px;
+        min-width: 54px;
+        min-height: 60px;
     }
     .feedback-emoji-btn .emoji-icon {
-        font-size: 1.7rem;
+        font-size: 1.65rem;
     }
     .feedback-emoji-btn .emoji-label {
         font-size: 0.68rem;
     }
+    
+    .feedback-drawer-panel.is-form-mode .feedback-emoji-btn {
+        min-height: 46px;
+        min-width: 48px;
+        padding: 5px 3px;
+    }
+    .feedback-drawer-panel.is-form-mode .feedback-emoji-btn .emoji-icon {
+        font-size: 1.3rem;
+    }
+    .feedback-drawer-panel.is-form-mode .feedback-emoji-btn .emoji-label {
+        font-size: 0.62rem;
+    }
 }
 @media (max-width: 360px) {
     .feedback-rating-scale {
-        gap: 5px;
+        gap: 4px;
     }
     .feedback-emoji-btn {
-        padding: 8px 6px;
-        min-width: 48px;
-        min-height: 56px;
+        padding: 7px 4px;
+        min-width: 44px;
+        min-height: 52px;
     }
     .feedback-emoji-btn .emoji-icon {
-        font-size: 1.45rem;
+        font-size: 1.35rem;
     }
     .feedback-emoji-btn .emoji-label {
-        font-size: 0.62rem;
+        font-size: 0.6rem;
     }
 }

@@ -710,23 +710,28 @@ function initFeedbackFunnel() {
         });
     });
 
-    // Auto-scroll inside drawer when textarea or inputs are focused on mobile devices
+    // Auto-scroll inside drawer when textarea is focused or typed in
     const commentField = document.getElementById('feedback-comment');
-    const contactField = document.getElementById('feedback-contact');
-    [commentField, contactField].forEach(field => {
-        if (field) {
-            field.addEventListener('focus', () => {
-                if (drawerPanel) {
-                    setTimeout(() => {
-                        const submitBtn = document.getElementById('feedback-submit-btn');
-                        if (submitBtn) {
-                            submitBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                        }
-                    }, 200);
+    if (commentField) {
+        commentField.addEventListener('focus', () => {
+            if (drawerPanel) {
+                setTimeout(() => {
+                    const submitBtn = document.getElementById('feedback-submit-btn');
+                    if (submitBtn) {
+                        submitBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                }, 150);
+            }
+        });
+        commentField.addEventListener('input', () => {
+            if (drawerPanel) {
+                const submitBtn = document.getElementById('feedback-submit-btn');
+                if (submitBtn) {
+                    submitBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }
-            });
-        }
-    });
+            }
+        });
+    }
 
     // Form submission handler
     if (internalForm) {
@@ -736,14 +741,13 @@ function initFeedbackFunnel() {
             const ratingVal = ratingInput ? parseInt(ratingInput.value, 10) : 3;
             const labelVal = labelInput ? labelInput.value.toLowerCase() : "regular";
             const commentVal = document.getElementById('feedback-comment')?.value.trim() || "";
-            const contactVal = document.getElementById('feedback-contact')?.value.trim() || "No proporcionado";
 
             const payload = {
                 fecha_hora: new Date().toISOString(),
                 calificacion: labelVal,
                 calificacion_num: ratingVal,
                 comentario: commentVal,
-                contacto: contactVal,
+                contacto: "Usuario Anónimo",
                 tipo_registro: "formulario_completo"
             };
 

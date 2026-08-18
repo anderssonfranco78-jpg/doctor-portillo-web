@@ -1908,27 +1908,42 @@ body.drawer-lock-scroll {
     font-size: 0.78rem;
 }
 .form-group-compact {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 .feedback-compact-textarea {
-    min-height: 58px;
-    padding: 10px 12px;
-    font-size: 0.9rem;
+    min-height: 72px;
+    padding: 12px 14px;
+    font-size: 0.95rem;
     resize: none;
-    line-height: 1.4;
-    border-radius: 12px;
+    line-height: 1.45;
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    transition: all 0.25s ease;
 }
-.feedback-compact-input {
-    padding: 9px 12px;
-    font-size: 0.88rem;
-    border-radius: 12px;
+.feedback-compact-textarea:focus {
+    border-color: #10b981;
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.35);
+    outline: none;
 }
 .feedback-submit-btn-prominent {
-    padding: 13px 20px !important;
-    font-size: 0.95rem !important;
-    font-weight: 600;
+    padding: 15px 22px !important;
+    font-size: 1rem !important;
+    font-weight: 700;
+    letter-spacing: 0.5px;
     margin-top: 4px;
-    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.5) !important;
+    cursor: pointer;
+    border-radius: 14px;
+    transition: all 0.25s ease;
+}
+.feedback-submit-btn-prominent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(16, 185, 129, 0.65) !important;
+}
+.feedback-submit-btn-prominent:active {
+    transform: scale(0.98);
 }
 
 /* Thank You State */

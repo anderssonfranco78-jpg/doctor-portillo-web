@@ -2,67 +2,92 @@
    Quiroprácticos Portillo - Premium Animation and Conversion Core
    ========================================================================== */
 
-// Symptoms and Treatments Data Repository
+// Symptoms, Treatments & 4 Pillars Data Repository (Información Real Dr. Portillo)
 const symptomsRepository = {
+    'Pilar1': {
+        title: 'Pilar 1: Biomecánica y Quiropraxia',
+        body: 'Alineación manual vertebral de alta precisión, corrección articular y descompresión física de nervios comprimidos en la columna cervical, torácica y lumbar. Tratamiento de ciática y hernias discales sin cirugía.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa una consulta sobre el Pilar de Biomecánica y Quiropraxia.'
+    },
+    'Pilar2': {
+        title: 'Pilar 2: Enfermedades Crónicas',
+        body: 'Protocolos con medicina natural y nutrición ortomolecular orientados a la recuperación en enfermedades autoinmunes, disfunción del sistema nervioso central, afecciones vasculares y apoyo a terapias oncológicas.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y deseo información sobre el tratamiento para Enfermedades Crónicas y Nutrición Ortomolecular.'
+    },
+    'Pilar3': {
+        title: 'Pilar 3: Recuperación Visual',
+        body: 'Programa clínico integrativo que combina ejercicios oculares especializados, nutrición específica, medicamentos homeopáticos y tecnología médica para el fortalecimiento y recuperación de la salud visual.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa agendar una consulta de Recuperación Visual.'
+    },
+    'Pilar4': {
+        title: 'Pilar 4: Club para Diabéticos',
+        body: 'Abordaje integral de la diabetes: comprensión del origen biológico, tratamiento homeopático del componente emocional, nutrición orientada, ejercicio guiado, exposición solar y equilibrio mental y espiritual.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y deseo unirme o recibir información sobre el Club para Diabéticos.'
+    },
+    'EscanerCuantico': {
+        title: 'Diagnóstico con Escáner Cuántico (30 Exámenes)',
+        body: 'Evaluación biofísica integral que analiza 30 parámetros fisiológicos en una sola sesión. Detecta inflamaciones vasculares, sobrecargas en órganos internos y desbalances celulares antes de que los síntomas se vuelvan críticos.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y deseo agendar una cita para la evaluación con Escáner Cuántico (30 exámenes).'
+    },
     'Cervical': {
-        title: 'Ajuste Cervical Científico',
-        body: 'Ajustes quiroprácticos cervicales de precisión para corregir desviaciones del atlas y axis. Libera la presión nerviosa que provoca rigidez extrema, dolores irradiados hacia hombros, mareos y migrañas de origen tensional.',
-        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa una consulta para valoración quiropráctica de Cervicalgia y Rigidez.'
+        title: 'Ajuste Cervical de Precisión',
+        body: 'Alineación específica de atlas y axis para eliminar la irritación en nervios cervicales. Alivia rigidez de cuello, dolores irradiados a hombros, mareos y migrañas de origen tensional.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa una valoración para dolor de cuello y rigidez cervical.'
     },
     'Dorsal': {
-        title: 'Corrección de Vértebras Torácicas',
-        body: 'Ajustes específicos en la espalda alta para restaurar la movilidad de las costillas y vértebras dorsales. Libera la tensión provocada por malos hábitos posturales y evita inflamaciones de órganos internos.',
-        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa una consulta para valoración de dolor en la Espalda Alta o Dorsal.'
+        title: 'Corrección Torácica y Dorsal',
+        body: 'Ajustes en la espalda alta para devolver la movilidad articular a vértebras y costillas. Libera tensiones por malas posturas y previene alteraciones reflejas en órganos.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y deseo una consulta para dolor en la espalda alta o dorsal.'
     },
     'Lumbar': {
         title: 'Descompresión Lumbar Médica',
-        body: 'Manipulación y descompresión quiropráctica de la espalda baja. Alivia el pinzamiento de los nervios lumbares causados por hernias discales o subluxaciones, devolviendo la movilidad para agacharse y cargar peso.',
-        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa una consulta para valoración de Lumbalgia Crónica.'
+        body: 'Tratamiento no quirúrgico para liberar nervios lumbares comprimidos por hernias o subluxaciones. Devuelve la capacidad de flexión, carga y movimiento sin dolor.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y necesito una consulta para dolor de espalda baja o lumbalgia.'
     },
     'Sacro': {
-        title: 'Estabilización Sacrolumbar',
-        body: 'Corrección física de la base de la columna y el sacro. Restaura la alineación del centro de gravedad del cuerpo, aliviando dolores lumbosacros que dificultan caminar o mantenerse de pie.',
-        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa una consulta para valoración de dolor Lumbosacro o Cadera.'
+        title: 'Estabilización Sacrolumbar y Cadera',
+        body: 'Corrección de la base vertebral y articulación sacroilíaca. Restaura el centro de gravedad del cuerpo y alivia bloqueos agudos al caminar o permanecer de pie.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa una valoración para dolor lumbosacro o de cadera.'
     },
     'Ciática': {
-        title: 'Tratamiento del Nervio Ciático',
-        body: 'Enfoque no invasivo para liberar la raíz comprimida del nervio ciático en la zona lumbosacra. Alivia el dolor quemante, el entumecimiento y la debilidad motora irradiada a lo largo de las piernas.',
-        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa una consulta para descompresión de Nervio Ciático.'
+        title: 'Descompresión del Nervio Ciático',
+        body: 'Tratamiento focalizado para liberar la raíz del nervio ciático en la zona lumbosacra. Elimina el dolor punzante, adormecimiento y debilidad que baja por la pierna.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y requiero atención para compresión del nervio ciático.'
     },
     'Artrosis': {
-        title: 'Homeocinetría y Nutrición Ósea',
-        body: 'Infiltración articular de acupuntura combinada con medicamentos homeopáticos específicos. Resultados espontáneos de un día para otro para desinflamar rodillas. Acompañado de programas nutricionales para detener el desgaste óseo.',
-        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa una consulta sobre Homeocinetría e infiltraciones para articulaciones.'
+        title: 'Homeosinetría Articular (Rodilla y Articulaciones)',
+        body: 'Aplicación localizada de acupuntura con medicamentos homeopáticos específicos. Desinflamación rápida y efectiva en rodillas y articulaciones con desgaste, complementada con nutrición ósea.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa el tratamiento de Homeosinetría para articulaciones y rodilla.'
     },
     'AjusteQuiro': {
-        title: 'Ajuste Quiropráctico de Precisión',
-        body: 'Alineación física y manual de las vértebras desviadas para restaurar la función de las articulaciones de la columna vertebral y aliviar la presión sobre los nervios espinales. Corrige subluxaciones mecánicas.',
-        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa agendar una consulta para un Ajuste Quiropráctico.'
+        title: 'Ajuste Quiropráctico Clínico',
+        body: 'Corrección manual biomecánica de vértebras desviadas (subluxaciones). Libera la médula espinal y los nervios periféricos de compresiones mecánicas.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y me gustaría agendar una cita para Ajuste Quiropráctico.'
     },
     'TerapiaColumna': {
-        title: 'Terapia Descompresiva de Columna',
-        body: 'Tratamiento enfocado en la descompresión discal y articular de la columna cervical, torácica y lumbar. Ideal para reducir la presión en hernias, protusiones y desgaste prematuro de discos.',
-        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa agendar una cita para Terapia de Columna.'
+        title: 'Descompresión y Terapia de Columna',
+        body: 'Reducción de presión intradiscal y articular en columna cervical, torácica y lumbar. Alternativa segura y efectiva frente a cirugías de hernias discales.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y deseo información sobre Terapia de Columna.'
     },
     'MasajeTera': {
-        title: 'Masaje Terapéutico y Neuromuscular',
-        body: 'Terapia de tejidos blandos orientada a aliviar espasmos musculares severos, reducir la sobrecarga de la espalda y hombros, y mejorar el flujo sanguíneo y linfático en zonas contracturadas.',
-        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa una consulta para Masaje Terapéutico.'
+        title: 'Masaje Terapéutico Neuromuscular',
+        body: 'Tratamiento neuromuscular profundo para disolver contracturas crónicas, aliviar sobrecarga muscular y optimizar la irrigación sanguínea en zonas afectadas.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y deseo una sesión de Masaje Terapéutico.'
     },
     'RehabPostural': {
         title: 'Rehabilitación Postural y Biomecánica',
-        body: 'Programa personalizado de ejercicios y correcciones posturales para estabilizar la columna, fortalecer los músculos de soporte y evitar la recurrencia de dolores por malos hábitos en el trabajo o pantallas.',
-        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa información sobre la Rehabilitación Postural.'
+        body: 'Corrección de desequilibrios musculares y vicios posturales mediante ejercicios terapéuticos adaptados a cada paciente.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y solicito información sobre Rehabilitación Postural.'
     },
     'DolorCronico': {
-        title: 'Tratamiento Especializado de Dolor Crónico',
-        body: 'Protocolo médico no invasivo diseñado para pacientes con dolores persistentes de espalda, ciática severa, dolores articulares y migrañas que no han respondido a tratamientos tradicionales.',
-        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa el Tratamiento de Dolor Crónico.'
+        title: 'Manejo Integral de Dolor Crónico',
+        body: 'Protocolos integrativos para personas con dolores persistentes de columna, articulaciones o migrañas que no han cedido ante tratamientos convencionales.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y necesito una consulta para Dolor Crónico.'
     },
     'MedDeportiva': {
-        title: 'Medicina y Quiropráctica Deportiva',
-        body: 'Atención dirigida a atletas y personas activas. Enfocado en la optimización de las articulaciones, prevención de lesiones repetitivas, y aceleración de la recuperación tras esguinces, tirones y contracturas.',
-        waText: 'Hola Dr. Portillo, vi su sitio web y me interesa agendar una cita de Medicina Deportiva.'
+        title: 'Quiropraxia y Medicina Deportiva',
+        body: 'Optimización biomecánica articular para deportistas y personas activas. Prevención de lesiones y aceleración de la recuperación muscular.',
+        waText: 'Hola Dr. Portillo, vi su sitio web y deseo agendar una consulta de Quiropraxia Deportiva.'
     }
 };
 
@@ -93,12 +118,237 @@ function trackConversionEvent(eventName, data) {
     return eventId;
 }
 
-// Modal Control Functions
+// =============================================================================
+// ACCESSIBILITY VOICE ENGINE & ANIMATED AVATAR CONTROLLER (FASE 3)
+// =============================================================================
+const symptomsAudioMap = {
+    'Pilar1': 'audio-accesibilidad/audio-pilar1.mp3',
+    'Pilar2': 'audio-accesibilidad/audio-pilar2.mp3',
+    'Pilar3': 'audio-accesibilidad/audio-pilar3.mp3',
+    'Pilar4': 'audio-accesibilidad/audio-pilar4.mp3',
+    'EscanerCuantico': 'audio-accesibilidad/audio-escaner-cuantico.mp3',
+    'Cervical': 'audio-accesibilidad/audio-cervical.mp3',
+    'Dorsal': 'audio-accesibilidad/audio-dorsal.mp3',
+    'Lumbar': 'audio-accesibilidad/audio-lumbar.mp3',
+    'Sacro': 'audio-accesibilidad/audio-sacro.mp3',
+    'Ciática': 'audio-accesibilidad/audio-ciatica.mp3',
+    'Artrosis': 'audio-accesibilidad/audio-artrosis.mp3',
+    'AjusteQuiro': 'audio-accesibilidad/audio-ajuste-quiro.mp3',
+    'TerapiaColumna': 'audio-accesibilidad/audio-terapia-columna.mp3',
+    'MasajeTera': 'audio-accesibilidad/audio-masaje-tera.mp3',
+    'RehabPostural': 'audio-accesibilidad/audio-rehab-postural.mp3',
+    'DolorCronico': 'audio-accesibilidad/audio-dolor-cronico.mp3',
+    'MedDeportiva': 'audio-accesibilidad/audio-med-deportiva.mp3'
+};
+
+const testimonialAudioMap = {
+    'concepcion': 'audio-accesibilidad/audio-testimonio-concepcion.mp3',
+    'mario': 'audio-accesibilidad/audio-testimonio-mario.mp3',
+    'sonia': 'audio-accesibilidad/audio-testimonio-sonia.mp3',
+    'carlos': 'audio-accesibilidad/audio-testimonio-carlos.mp3'
+};
+
+let currentPlayingAudio = null;
+let currentActiveAudioBtn = null;
+let currentActiveAvatarFrame = null;
+let currentModalAudioKey = null;
+
+function stopAllAccessibilityAudio() {
+    if (currentPlayingAudio) {
+        currentPlayingAudio.pause();
+        currentPlayingAudio.currentTime = 0;
+        currentPlayingAudio = null;
+    }
+    if (currentActiveAvatarFrame) {
+        currentActiveAvatarFrame.classList.remove('is-talking');
+        currentActiveAvatarFrame = null;
+    }
+    if (currentActiveAudioBtn) {
+        currentActiveAudioBtn.classList.remove('is-playing', 'is-loading');
+        const textSpan = currentActiveAudioBtn.querySelector('.btn-audio-text');
+        if (textSpan) textSpan.textContent = currentActiveAudioBtn.dataset.defaultText || 'Escuchar';
+        const iconSpan = currentActiveAudioBtn.querySelector('.btn-audio-icon');
+        if (iconSpan) iconSpan.textContent = '🔊';
+        currentActiveAudioBtn = null;
+    }
+
+    // Desactivar todas las ondas de audio
+    const waveEls = document.querySelectorAll('.avatar-audio-equalizer');
+    waveEls.forEach(w => w.classList.remove('active'));
+
+    // Restaurar estados de texto
+    const modalStatus = document.getElementById('modalAudioStatus');
+    if (modalStatus && modalStatus.textContent.includes('Reproduciendo')) {
+        modalStatus.textContent = 'Escucha la explicación clínica';
+    }
+    const doctorStatus = document.getElementById('doctorAudioStatus');
+    if (doctorStatus && doctorStatus.textContent.includes('Reproduciendo')) {
+        doctorStatus.textContent = 'Escucha la trayectoria del Dr. Portillo';
+    }
+
+    // Reanudar autoplay de testimonios si no hay modales abiertos
+    const symptomModal = document.getElementById('symptomDetailModal');
+    const isModalOpen = symptomModal && symptomModal.classList.contains('open');
+    if (!isModalOpen && window.testimonialsSwiper && window.testimonialsSwiper.autoplay && !window.testimonialsSwiper.autoplay.running) {
+        try {
+            window.testimonialsSwiper.autoplay.start();
+        } catch (e) {}
+    }
+}
+
+function playAccessibilityAudio(audioSrc, btnElement, frameElement, defaultText = 'Escuchar') {
+    // Si se presiona el botón que ya está sonando, pausar y detener
+    if (currentPlayingAudio && currentActiveAudioBtn === btnElement) {
+        stopAllAccessibilityAudio();
+        return;
+    }
+
+    // Detener cualquier otro audio previo
+    stopAllAccessibilityAudio();
+    if (!audioSrc) return;
+
+    // Pausar autoplay del carrusel para que no corte el audio al cambiar de slide
+    if (window.testimonialsSwiper && window.testimonialsSwiper.autoplay && window.testimonialsSwiper.autoplay.running) {
+        try {
+            window.testimonialsSwiper.autoplay.stop();
+        } catch (e) {}
+    }
+
+    // Detección instantánea de modo sin conexión (Offline)
+    if (typeof navigator !== 'undefined' && 'onLine' in navigator && !navigator.onLine) {
+        const modalStatus = document.getElementById('modalAudioStatus');
+        if (modalStatus) modalStatus.textContent = 'Modo sin conexión. La información completa está disponible abajo.';
+        const doctorStatus = document.getElementById('doctorAudioStatus');
+        if (doctorStatus) doctorStatus.textContent = 'Modo sin conexión. Puedes leer su biografía completa aquí.';
+        return;
+    }
+
+    btnElement.dataset.defaultText = defaultText;
+    const textSpan = btnElement.querySelector('.btn-audio-text');
+    const iconSpan = btnElement.querySelector('.btn-audio-icon');
+
+    // Estado inicial: Cargando
+    btnElement.classList.add('is-loading');
+    if (textSpan) textSpan.textContent = 'Cargando...';
+    if (iconSpan) iconSpan.textContent = '⏳';
+
+    const modalStatus = document.getElementById('modalAudioStatus');
+    if (modalStatus && frameElement && frameElement.id === 'modalAvatarFrame') {
+        modalStatus.textContent = 'Preparando narración clínica...';
+    }
+    const doctorStatus = document.getElementById('doctorAudioStatus');
+    if (doctorStatus && frameElement && frameElement.id === 'avatar-frame-doctor') {
+        doctorStatus.textContent = 'Cargando biografía médica...';
+    }
+
+    // Carga 100% bajo demanda con preload none
+    const audio = new Audio();
+    audio.preload = 'none';
+    audio.src = audioSrc + '?v=2';
+
+    currentPlayingAudio = audio;
+    currentActiveAudioBtn = btnElement;
+    currentActiveAvatarFrame = frameElement;
+
+    // Evento onplaying: Se dispara cuando el sonido efectivamente empieza a emitirse
+    audio.onplaying = () => {
+        btnElement.classList.remove('is-loading');
+        btnElement.classList.add('is-playing');
+        if (textSpan) textSpan.textContent = 'Detener';
+        if (iconSpan) iconSpan.textContent = '⏹';
+
+        if (frameElement) {
+            frameElement.classList.add('is-talking');
+            const waveEl = frameElement.querySelector('.avatar-audio-equalizer') || document.getElementById('modalAvatarWave');
+            if (waveEl) waveEl.classList.add('active');
+        }
+
+        if (modalStatus && frameElement && frameElement.id === 'modalAvatarFrame') {
+            modalStatus.textContent = 'Reproduciendo audio clínico...';
+        }
+        if (doctorStatus && frameElement && frameElement.id === 'avatar-frame-doctor') {
+            doctorStatus.textContent = 'Reproduciendo biografía del Dr. Portillo...';
+        }
+    };
+
+    audio.onended = () => {
+        stopAllAccessibilityAudio();
+    };
+
+    audio.onerror = (e) => {
+        console.warn('[AUDIO ACCESIBILIDAD] Audio no disponible o error de red:', e);
+        if (modalStatus && frameElement && frameElement.id === 'modalAvatarFrame') {
+            modalStatus.textContent = 'Audio no disponible en este momento. El texto está disponible abajo.';
+        }
+        if (doctorStatus && frameElement && frameElement.id === 'avatar-frame-doctor') {
+            doctorStatus.textContent = 'Audio no disponible en este momento. El texto está disponible abajo.';
+        }
+        stopAllAccessibilityAudio();
+    };
+
+    audio.play().catch(err => {
+        console.warn('[AUDIO ACCESIBILIDAD] Reproducción diferida o bloqueada:', err);
+        stopAllAccessibilityAudio();
+    });
+}
+
+window.toggleModalAudio = function() {
+    const audioSrc = symptomsAudioMap[currentModalAudioKey];
+    const btn = document.getElementById('modalAudioBtn');
+    const frame = document.getElementById('modalAvatarFrame');
+    if (audioSrc && btn && frame) {
+        playAccessibilityAudio(audioSrc, btn, frame, 'Escuchar Explicación');
+    }
+};
+
+window.toggleDoctorAudio = function(btn) {
+    const audioSrc = 'audio-accesibilidad/audio-biografia-doctor.mp3';
+    const frame = document.getElementById('avatar-frame-doctor');
+    if (audioSrc && btn && frame) {
+        playAccessibilityAudio(audioSrc, btn, frame, 'Escuchar Biografía');
+    }
+};
+
+window.toggleTestimonialAudio = function(id, btn) {
+    const audioSrc = testimonialAudioMap[id];
+    const frame = document.getElementById(`avatar-frame-${id}`);
+    if (audioSrc && btn && frame) {
+        playAccessibilityAudio(audioSrc, btn, frame, 'Escuchar Historia');
+    }
+};
+
+// Modal Control Functions (Symptoms & Pillars)
 window.openSymptomModal = function(key) {
+    // Detener audio previo al abrir un nuevo síntoma
+    stopAllAccessibilityAudio();
+    currentModalAudioKey = key;
+
     const modal = document.getElementById('symptomDetailModal');
     const titleEl = document.getElementById('modal-window-title');
     const bodyEl = document.getElementById('modal-window-body');
     const waCta = document.getElementById('modal-wa-cta-btn');
+    
+    // Resetear UI del botón de audio del modal
+    const modalBtn = document.getElementById('modalAudioBtn');
+    if (modalBtn) {
+        modalBtn.classList.remove('is-playing', 'is-loading');
+        const textSpan = modalBtn.querySelector('.btn-audio-text');
+        if (textSpan) textSpan.textContent = 'Escuchar Explicación';
+        const iconSpan = modalBtn.querySelector('.btn-audio-icon');
+        if (iconSpan) iconSpan.textContent = '🔊';
+    }
+    const modalFrame = document.getElementById('modalAvatarFrame');
+    if (modalFrame) {
+        modalFrame.classList.remove('is-talking');
+    }
+    const modalWave = document.getElementById('modalAvatarWave');
+    if (modalWave) {
+        modalWave.classList.remove('active');
+    }
+    const modalStatus = document.getElementById('modalAudioStatus');
+    if (modalStatus) {
+        modalStatus.textContent = 'Escucha la explicación clínica';
+    }
     
     const info = symptomsRepository[key] || {
         title: 'Valoración Médica',
@@ -125,13 +375,77 @@ window.openSymptomModal = function(key) {
 };
 
 window.closeSymptomModal = function() {
+    stopAllAccessibilityAudio();
     const modal = document.getElementById('symptomDetailModal');
-    modal.classList.remove('open');
+    if (modal) {
+        modal.classList.remove('open');
+    }
     
     // Reactivate Lenis scroll
     if (lenisInstance) {
         lenisInstance.start();
     }
+};
+
+// Credentials / Diplomas Modal Controls (20 Diplomas Dr. Portillo)
+window.openCredentialsModal = function() {
+    const modal = document.getElementById('credentialsModal');
+    if (!modal) return;
+    
+    trackConversionEvent('ViewDoctorCredentials', { doctor: 'Dr. Luis Alberto Portillo' });
+    
+    if (lenisInstance) {
+        lenisInstance.stop();
+    }
+    
+    // Reset filter to 'all' on open
+    window.filterDiplomasCategory('all');
+    
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+};
+
+window.closeCredentialsModal = function() {
+    const modal = document.getElementById('credentialsModal');
+    if (modal) {
+        modal.classList.remove('open');
+    }
+    if (lenisInstance) {
+        lenisInstance.start();
+    }
+    const symptomModal = document.getElementById('symptomDetailModal');
+    if (!symptomModal || !symptomModal.classList.contains('open')) {
+        document.body.style.overflow = '';
+    }
+};
+
+// Filter diplomas by category interactively
+window.filterDiplomasCategory = function(cat, btnEl) {
+    const pills = document.querySelectorAll('.specialty-pill-btn');
+    pills.forEach(btn => btn.classList.remove('active'));
+    
+    if (btnEl) {
+        btnEl.classList.add('active');
+    } else {
+        const defaultBtn = document.querySelector(`.specialty-pill-btn[data-category="${cat}"]`);
+        if (defaultBtn) defaultBtn.classList.add('active');
+    }
+    
+    const entries = document.querySelectorAll('.diploma-entry');
+    entries.forEach(entry => {
+        const entryCat = entry.getAttribute('data-cat') || 'all';
+        if (cat === 'all' || entryCat.includes(cat)) {
+            entry.style.display = 'block';
+        } else {
+            entry.style.display = 'none';
+        }
+    });
+    
+    // Check year groups to hide empty ones
+    document.querySelectorAll('.timeline-year-group').forEach(group => {
+        const visibleEntries = Array.from(group.querySelectorAll('.diploma-entry')).filter(el => el.style.display !== 'none');
+        group.style.display = visibleEntries.length > 0 ? 'block' : 'none';
+    });
 };
 
 // Form submit handler with custom WhatsApp redirection
@@ -299,54 +613,42 @@ function setupDesktopMode(device) {
         }
     }
     
-    // Initialize text revelations using SplitType and GSAP ScrollTrigger
+    // Initialize clean text and element revelations using GSAP ScrollTrigger
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
         try {
             const animateElements = document.querySelectorAll('[animate]');
             
             animateElements.forEach(el => {
-                if ((el.tagName === 'H1' || el.tagName === 'H2' || el.classList.contains('hero-subtext')) && typeof SplitType !== 'undefined' && !device.prefersReducedMotion) {
-                    try {
-                        const text = new SplitType(el, { types: 'lines, words' });
-                        
-                        gsap.set(text.words, {
-                            opacity: 0,
-                            y: 20
-                        });
-                        
-                        gsap.to(text.words, {
+                if (el.tagName === 'H1' || el.tagName === 'H2') {
+                    gsap.fromTo(el, 
+                        { opacity: 0, y: 28 },
+                        {
                             opacity: 1,
                             y: 0,
-                            duration: 0.5,
-                            ease: "power1.out",
-                            stagger: 0.02,
+                            duration: 0.8,
+                            ease: "power2.out",
                             scrollTrigger: {
                                 trigger: el,
-                                start: "top 85%",
+                                start: "top 88%",
                                 toggleActions: "play none none none"
                             }
-                        });
-                    } catch (stErr) {
-                        gsap.set(el, { opacity: 0, y: 30 });
-                        gsap.to(el, { opacity: 1, y: 0, duration: 0.6 });
-                    }
-                } else {
-                    gsap.set(el, {
-                        opacity: 0,
-                        y: 40
-                    });
-                    
-                    gsap.to(el, {
-                        opacity: 1,
-                        y: 0,
-                        duration: 0.7,
-                        ease: "power2.out",
-                        scrollTrigger: {
-                            trigger: el,
-                            start: "top 88%",
-                            toggleActions: "play none none none"
                         }
-                    });
+                    );
+                } else {
+                    gsap.fromTo(el,
+                        { opacity: 0, y: 35 },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.7,
+                            ease: "power2.out",
+                            scrollTrigger: {
+                                trigger: el,
+                                start: "top 90%",
+                                toggleActions: "play none none none"
+                            }
+                        }
+                    );
                 }
             });
 
@@ -354,27 +656,22 @@ function setupDesktopMode(device) {
             const servicesGrid = document.querySelector('.services-grid-premium');
             if (servicesGrid) {
                 const cards = servicesGrid.querySelectorAll('.service-card-premium');
-                gsap.set(cards, {
-                    opacity: 0,
-                    y: 50,
-                    scale: 0.9,
-                    rotation: -2
-                });
-                
-                gsap.to(cards, {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    rotation: 0,
-                    duration: 0.8,
-                    ease: "back.out(1.2)",
-                    stagger: 0.12,
-                    scrollTrigger: {
-                        trigger: servicesGrid,
-                        start: "top 85%",
-                        toggleActions: "play none none none"
+                gsap.fromTo(cards,
+                    { opacity: 0, y: 40, scale: 0.95 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        duration: 0.7,
+                        ease: "power2.out",
+                        stagger: 0.1,
+                        scrollTrigger: {
+                            trigger: servicesGrid,
+                            start: "top 85%",
+                            toggleActions: "play none none none"
+                        }
                     }
-                });
+                );
             }
         } catch (err) {
             console.warn("[ANIMATION MOTOR] Error in GSAP animations:", err);
@@ -807,6 +1104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closeSymptomModal();
+        closeCredentialsModal();
         closeFeedbackDrawer();
     }
 });
@@ -821,14 +1119,23 @@ if (modalOverlay) {
     });
 }
 
+const credentialsOverlay = document.getElementById('credentialsModal');
+if (credentialsOverlay) {
+    credentialsOverlay.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeCredentialsModal();
+        }
+    });
+}
+
 // Swiper Testimonials Init
 document.addEventListener('DOMContentLoaded', function() {
     if (typeof Swiper !== 'undefined') {
-        new Swiper('.testimonials-swiper', {
+        const swiper = new Swiper('.testimonials-swiper', {
             loop: true,
             autoplay: {
-                delay: 3500,
-                disableOnInteraction: false,
+                delay: 4500,
+                disableOnInteraction: true,
             },
             slidesPerView: 1,
             spaceBetween: 30,
@@ -847,5 +1154,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
+
+        // Guardar referencia global para pausar autoplay durante reproducción de audio
+        window.testimonialsSwiper = swiper;
+
+        // Detener audio UNICAMENTE si el usuario cambia manualmente de testimonio mientras suena un testimonio
+        swiper.on('slideChange', () => {
+            if (currentPlayingAudio && currentActiveAudioBtn && currentActiveAudioBtn.classList.contains('btn-audio-pill') && currentActiveAudioBtn.id !== 'btn-doctor-audio') {
+                stopAllAccessibilityAudio();
+            }
+        });
     }
 });
+

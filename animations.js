@@ -323,8 +323,12 @@ window.openSymptomModal = function(key) {
     stopAllAccessibilityAudio();
     currentModalAudioKey = key;
 
+    // Guardar posición exacta de scroll de la página para que jamás regrese al inicio al cerrar
+    const currentScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+
     const modal = document.getElementById('symptomDetailModal');
     if (modal) {
+        modal._savedScrollY = currentScrollY;
         const content = modal.querySelector('.modal-window-content');
         if (content) {
             content.scrollTop = 0;
@@ -378,9 +382,6 @@ window.openSymptomModal = function(key) {
     if (lenisInstance) {
         lenisInstance.stop();
     }
-    
-    document.documentElement.classList.add('drawer-lock-scroll');
-    document.body.classList.add('drawer-lock-scroll');
 
     if (modal) {
         modal.classList.add('open');
@@ -390,16 +391,20 @@ window.openSymptomModal = function(key) {
 window.closeSymptomModal = function() {
     stopAllAccessibilityAudio();
     const modal = document.getElementById('symptomDetailModal');
+    let targetY = null;
     if (modal) {
         modal.classList.remove('open');
+        targetY = modal._savedScrollY;
     }
-    
-    document.documentElement.classList.remove('drawer-lock-scroll');
-    document.body.classList.remove('drawer-lock-scroll');
 
-    // Reactivate Lenis scroll
+    // Reactivar Lenis scroll y retener la posición exacta sin mandar al inicio
     if (lenisInstance) {
         lenisInstance.start();
+        if (typeof targetY === 'number') {
+            lenisInstance.scrollTo(targetY, { immediate: true });
+        }
+    } else if (typeof targetY === 'number') {
+        window.scrollTo({ top: targetY, behavior: 'instant' });
     }
 };
 
@@ -410,6 +415,9 @@ window.openCredentialsModal = function() {
     
     trackConversionEvent('ViewDoctorCredentials', { doctor: 'Dr. Luis Alberto Portillo' });
     
+    const currentScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+    modal._savedScrollY = currentScrollY;
+
     if (lenisInstance) {
         lenisInstance.stop();
     }
@@ -418,20 +426,22 @@ window.openCredentialsModal = function() {
     window.filterDiplomasCategory('all');
     
     modal.classList.add('open');
-    document.body.style.overflow = 'hidden';
 };
 
 window.closeCredentialsModal = function() {
     const modal = document.getElementById('credentialsModal');
+    let targetY = null;
     if (modal) {
         modal.classList.remove('open');
+        targetY = modal._savedScrollY;
     }
     if (lenisInstance) {
         lenisInstance.start();
-    }
-    const symptomModal = document.getElementById('symptomDetailModal');
-    if (!symptomModal || !symptomModal.classList.contains('open')) {
-        document.body.style.overflow = '';
+        if (typeof targetY === 'number') {
+            lenisInstance.scrollTo(targetY, { immediate: true });
+        }
+    } else if (typeof targetY === 'number') {
+        window.scrollTo({ top: targetY, behavior: 'instant' });
     }
 };
 
@@ -851,22 +861,26 @@ function openFeedbackDrawer() {
         trigger.setAttribute('aria-expanded', 'true');
     }
     
+    const currentScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+    if (overlay) {
+        overlay._savedScrollY = currentScrollY;
+    }
+
     // Stop Lenis smooth scroll on the main page so mousewheel & trackpad scroll inside drawer
     if (lenisInstance) {
         lenisInstance.stop();
     }
-    document.documentElement.classList.add('drawer-lock-scroll');
-    document.body.classList.add('drawer-lock-scroll');
-    document.body.style.overflow = 'hidden';
 }
 
 function closeFeedbackDrawer() {
     const overlay = document.getElementById('feedbackDrawerOverlay');
     const trigger = document.getElementById('feedbackTabTrigger');
     const drawerPanel = document.getElementById('feedbackDrawerPanel');
+    let targetY = null;
     if (overlay) {
         overlay.classList.remove('active');
         overlay.setAttribute('aria-hidden', 'true');
+        targetY = overlay._savedScrollY;
     }
     if (trigger) {
         trigger.setAttribute('aria-expanded', 'false');
@@ -878,13 +892,11 @@ function closeFeedbackDrawer() {
     // Reactivate Lenis smooth scroll on the main page
     if (lenisInstance) {
         lenisInstance.start();
-    }
-    document.documentElement.classList.remove('drawer-lock-scroll');
-    document.body.classList.remove('drawer-lock-scroll');
-    
-    const symptomModal = document.getElementById('symptomDetailModal');
-    if (!symptomModal || !symptomModal.classList.contains('active')) {
-        document.body.style.overflow = '';
+        if (typeof targetY === 'number') {
+            lenisInstance.scrollTo(targetY, { immediate: true });
+        }
+    } else if (typeof targetY === 'number') {
+        window.scrollTo({ top: targetY, behavior: 'instant' });
     }
 }
 

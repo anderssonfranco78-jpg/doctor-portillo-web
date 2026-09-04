@@ -1740,10 +1740,8 @@ h1, h2, h3, h4, .hero-headline {
 }
 
 /* Background scroll lock when modal or drawer is active */
-html.drawer-lock-scroll,
 body.drawer-lock-scroll {
-    overflow: hidden !important;
-    height: 100% !important;
+    overflow: hidden;
 }
 
 /* === SMART FLOATING FEEDBACK TAB & DRAWER === */

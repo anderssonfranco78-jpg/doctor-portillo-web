@@ -324,6 +324,14 @@ window.openSymptomModal = function(key) {
     currentModalAudioKey = key;
 
     const modal = document.getElementById('symptomDetailModal');
+    if (modal) {
+        const content = modal.querySelector('.modal-window-content');
+        if (content) {
+            content.scrollTop = 0;
+        }
+        modal.scrollTop = 0;
+    }
+
     const titleEl = document.getElementById('modal-window-title');
     const bodyEl = document.getElementById('modal-window-body');
     const waCta = document.getElementById('modal-wa-cta-btn');
@@ -371,7 +379,12 @@ window.openSymptomModal = function(key) {
         lenisInstance.stop();
     }
     
-    modal.classList.add('open');
+    document.documentElement.classList.add('drawer-lock-scroll');
+    document.body.classList.add('drawer-lock-scroll');
+
+    if (modal) {
+        modal.classList.add('open');
+    }
 };
 
 window.closeSymptomModal = function() {
@@ -381,6 +394,9 @@ window.closeSymptomModal = function() {
         modal.classList.remove('open');
     }
     
+    document.documentElement.classList.remove('drawer-lock-scroll');
+    document.body.classList.remove('drawer-lock-scroll');
+
     // Reactivate Lenis scroll
     if (lenisInstance) {
         lenisInstance.start();

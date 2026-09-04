@@ -1021,16 +1021,20 @@ textarea.form-input-premium {
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(8, 8, 8, 0.85);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    background: rgba(8, 8, 8, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     z-index: 2000;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.3s ease;
+    padding: 24px 16px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 }
 
 .modal-overlay.open {
@@ -1039,18 +1043,22 @@ textarea.form-input-premium {
 }
 
 .modal-window-content {
-    background: rgba(25, 25, 25, 0.75);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #111318;
+    border: 1px solid rgba(16, 185, 129, 0.35);
     border-radius: var(--radius-premium);
-    padding: 60px;
-    max-width: 580px;
-    width: calc(100% - 48px);
+    padding: 48px 36px 36px 36px;
+    max-width: 560px;
+    width: 100%;
+    margin: auto;
     position: relative;
-    box-shadow: var(--shadow-premium);
-    transform: scale(0.95);
-    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(16, 185, 129, 0.15);
+    transform: scale(0.96);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    max-height: calc(100dvh - 36px);
+    max-height: calc(100vh - 36px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 }
 
 .modal-overlay.open .modal-window-content {
@@ -1501,10 +1509,86 @@ footer {
     .contact-form-premium {
         padding: 40px 24px;
     }
+    .modal-overlay {
+        padding: 12px 10px !important;
+        align-items: flex-start !important;
+    }
     .modal-window-content {
-        padding: 32px 20px !important;
-        width: calc(100% - 32px);
-        max-width: 480px;
+        padding: 22px 18px 20px 18px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: auto 0 !important;
+        max-height: calc(100dvh - 24px) !important;
+        max-height: calc(100vh - 24px) !important;
+        border-radius: 20px !important;
+    }
+    .modal-window-icon {
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 12px !important;
+        margin-bottom: 12px !important;
+    }
+    .modal-window-icon svg {
+        width: 22px !important;
+        height: 22px !important;
+    }
+    .modal-window-title {
+        font-size: 1.45rem !important;
+        margin-bottom: 8px !important;
+        line-height: 1.25 !important;
+        padding-right: 36px !important;
+    }
+    .modal-window-body {
+        font-size: 0.92rem !important;
+        margin-bottom: 14px !important;
+        line-height: 1.5 !important;
+    }
+    .modal-audio-card {
+        padding: 10px 14px !important;
+        margin: 12px 0 14px 0 !important;
+        gap: 12px !important;
+        border-radius: 14px !important;
+    }
+    .modal-avatar-frame {
+        width: 52px !important;
+        height: 52px !important;
+        min-width: 52px !important;
+    }
+    .modal-audio-badge {
+        font-size: 0.68rem !important;
+    }
+    .modal-audio-status {
+        font-size: 0.8rem !important;
+    }
+    .modal-audio-card .btn-audio-listen {
+        padding: 8px 16px !important;
+        font-size: 0.82rem !important;
+    }
+    .modal-list-benefits {
+        gap: 8px !important;
+        margin-bottom: 16px !important;
+    }
+    .modal-benefit-item {
+        font-size: 0.86rem !important;
+        line-height: 1.35 !important;
+        gap: 10px !important;
+    }
+    .modal-benefit-item svg {
+        width: 16px !important;
+        height: 16px !important;
+        min-width: 16px !important;
+    }
+    .modal-cta-btn {
+        width: 100% !important;
+        padding: 13px 18px !important;
+        font-size: 0.95rem !important;
+        justify-content: center !important;
+    }
+    .modal-window-close {
+        top: 14px !important;
+        right: 14px !important;
+        width: 36px !important;
+        height: 36px !important;
     }
     .footer-grid-container {
         gap: 40px;
@@ -1649,7 +1733,8 @@ h1, h2, h3, h4, .hero-headline {
 }
 
 .is-mobile-device .modal-window-content {
-    max-height: 88vh;
+    max-height: calc(100dvh - 24px);
+    max-height: calc(100vh - 24px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
